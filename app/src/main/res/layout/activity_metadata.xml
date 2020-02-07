@@ -6,6 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".MetadataActivity">
 
+    <TextView
+        android:id="@+id/currentTrack"
+        android:layout_width="361dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="500dp"
+        android:gravity="center"
+        android:text="There seems to have been an error!"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/returnToMain"
         android:layout_width="wrap_content"
@@ -17,4 +35,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/metaData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="175dp"
+        android:gravity="center"
+        android:text="SHOWME"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/currentTrack"
+        tools:layout_editor_absoluteX="176dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

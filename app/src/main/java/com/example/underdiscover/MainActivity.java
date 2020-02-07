@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onConnected(SpotifyAppRemote spotifyAppRemote) {
                 mSpotifyAppRemote = spotifyAppRemote;
+                mSpotifyAppRemote.getPlayerApi().pause();
             }
 
             @Override
@@ -142,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         ACCESS_TOKEN = AuthenticationClient.getResponse(resultCode, intent).getAccessToken();
-        Log.d("checkvalue", ACCESS_TOKEN);
     }
 
     public void onClickChangePlayerState(View view) {
@@ -170,10 +170,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickShowMetaData(View view) {
-        mSpotifyAppRemote.getPlayerApi().subscribeToPlayerState().setEventCallback(playerState -> {
-            Intent metaDataIntent = new Intent(MainActivity.this, MetadataActivity.class);
-            metaDataIntent.putExtra("TrackID", playerState.track.uri);
-            MainActivity.this.startActivity(metaDataIntent);
-                });
+
+        if (playerState != 0) {
+
+            mSpotifyAppRemote.getPlayerApi().subscribeToPlayerState().setEventCallback(playerState -> {
+                Intent metaDataIntent = new Intent(MainActivity.this, MetadataActivity.class);
+
+                String[] trackUri = playerState.track.uri.split(":");
+
+                Log.d("TESTING", playerState.track.uri);
+                metaDataIntent.putExtra("TrackID", trackUri[2]);
+                metaDataIntent.putExtra("Access", ACCESS_TOKEN);
+                metaDataIntent.putExtra("TrackName", playerState.track.name + " by " + playerState.track.artist.name);
+
+                MainActivity.this.startActivity(metaDataIntent);
+
+            });
+
+            Button changePlayerState = findViewById(R.id.changePlayerState);
+            playerState = 2;
+            changePlayerState.setText("Resume");
+        }
+
+        else {
+            Snackbar noTrack = Snackbar.make(view, "No track to gather data on playing!", Snackbar.LENGTH_LONG);
+            noTrack.show();
+        }
     }
 }

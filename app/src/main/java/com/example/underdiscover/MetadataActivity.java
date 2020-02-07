@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,9 +30,12 @@ public class MetadataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_metadata);
 
-//        String apiUrl = METADATA_URL +
-//
-//        fetchInstance = new HttpStuff.execute(apiUrl);
+        final String apiUrl = METADATA_URL + getIntent().getStringExtra("TrackID");
+
+        TextView title = findViewById(R.id.currentTrack);
+        title.setText("Meta Data for: " + getIntent().getStringExtra("TrackName"));
+
+        fetchInstance = new HttpStuff().execute(apiUrl);
     }
 
     public void onClickReturnToMain(View view) {
@@ -49,6 +53,9 @@ public class MetadataActivity extends AppCompatActivity {
                 URL url = new URL(urlString[0]);
                 urlConn = (HttpURLConnection) url.openConnection();
                 urlConn.setRequestMethod("GET");
+                urlConn.setRequestProperty("Accept", "application/json");
+                urlConn.setRequestProperty("Content-Type", "application/json");
+                urlConn.setRequestProperty("Authorization", "Bearer " + getIntent().getStringExtra("Access"));
 
                 if (urlConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     result = streamIntoString(urlConn.getInputStream());
@@ -93,7 +100,18 @@ public class MetadataActivity extends AppCompatActivity {
     }
 
     protected void dealWithResult(String result) {
-        Log.d("RESULT", result);
+
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                TextView metadata = findViewById(R.id.metaData);
+                metadata.setText(result);
+                metadata.setVisibility(View.VISIBLE);
+
+            }
+        });
 //        try {
 //            JSONObject jsonResp = new JSONObject(result);
 //        }
