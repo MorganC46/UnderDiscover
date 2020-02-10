@@ -117,11 +117,29 @@ public class MetadataActivity extends AppCompatActivity {
 
         for (int count = 0; count < resultArray.length; count++) {
             String[] variable = resultArray[count].split(":");
-            variable[0] = variable[0].replace(" ", "").replace("\"", "");
+            variable[0] = variable[0].replaceAll("\\s", "").replaceAll("\"", "");
 
-            attributeList.add(variable[0].substring(0,1).toUpperCase() + variable[0].substring(1)
-                + ": " + variable[1]);
+            Log.d("TESTING", variable[0]);
 
+            if (variable[0].equals("danceability") || variable[0].equals("energy") || variable[0].equals("speechiness") ||
+                    variable[0].equals("valence") || variable[0].equals("acousticness")) {
+                double oneToHundred = (Double.parseDouble(variable[1]))*100;
+                double oneToHundredRounded = Math.round(oneToHundred*10) / 10.0;
+                attributeList.add(variable[0].substring(0,1).toUpperCase() + variable[0].substring(1)
+                        + ": " + oneToHundredRounded);
+            }
+            else if (variable[0].equals("loudness")) {
+                double loudness = Math.round(Double.parseDouble(variable[1])*10) / 10.0;
+                attributeList.add(variable[0].substring(0,1).toUpperCase() + variable[0].substring(1)
+                        + ": " + loudness + " dB");
+            }
+            else if (variable[0].equals("tempo")) {
+                int tempo = (int) Math.round(Double.parseDouble(variable[1]));
+                attributeList.add(variable[0].substring(0,1).toUpperCase() + variable[0].substring(1)
+                        + ": " + tempo + " BPM");
+            }
+//            attributeList.add(variable[0].substring(0,1).toUpperCase() + variable[0].substring(1)
+//                    + ": " + variable[1]);
         }
 
         runOnUiThread(new Runnable() {
