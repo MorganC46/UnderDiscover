@@ -2,28 +2,31 @@ package com.example.underdiscover;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class MetadataActivity extends AppCompatActivity {
 
     private AsyncTask fetchInstance;
     private final String METADATA_URL = "https://api.spotify.com/v1/audio-features/";
+    private ArrayList<String> attributeList;
+    private Activity context;
+    ListView metadataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,16 @@ public class MetadataActivity extends AppCompatActivity {
         TextView title = findViewById(R.id.currentTrack);
         title.setText("Meta Data for: " + getIntent().getStringExtra("TrackName"));
 
+        this.attributeList = new ArrayList<>();
+        this.context = this;
+
         fetchInstance = new HttpStuff().execute(apiUrl);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     public void onClickReturnToMain(View view) {
@@ -100,18 +112,29 @@ public class MetadataActivity extends AppCompatActivity {
     }
 
     protected void dealWithResult(String result) {
+        result = result.replace("{", "").replace("}", "");
+        String[] resultArray = result.split(",");
+
+        for (int count = 0; count < resultArray.length; count++) {
+            String[] variable = resultArray[count].split(":");
+            variable[0] = variable[0].replace(" ", "").replace("\"", "");
+
+            attributeList.add(variable[0].substring(0,1).toUpperCase() + variable[0].substring(1)
+                + ": " + variable[1]);
+
+        }
 
         runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
-
-                TextView metadata = findViewById(R.id.metaData);
-                metadata.setText(result);
-                metadata.setVisibility(View.VISIBLE);
-
+                MetaDataListAdapter metadataAdapter = new MetaDataListAdapter(context, attributeList.toArray(new String[0]), R.layout.listview_metadata);
+                metadataList = findViewById(R.id.attributeListView);
+                metadataList.setAdapter(metadataAdapter);
             }
         });
+    }
+
 //        try {
 //            JSONObject jsonResp = new JSONObject(result);
 //        }
@@ -119,5 +142,4 @@ public class MetadataActivity extends AppCompatActivity {
 //            eJSON.printStackTrace();
 //            System.exit(3);
 //        }
-    }
 }
