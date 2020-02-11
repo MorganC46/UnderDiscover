@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             noInternet.show();
         }
         else {
-            authenticateSpotify();
+            authenticateSpotify(); //TODO: Do this before the main activity is created - possibly in separate activity?
         }
     }
 
@@ -196,5 +196,17 @@ public class MainActivity extends AppCompatActivity {
             Snackbar noTrack = Snackbar.make(view, "No track to gather data on playing!", Snackbar.LENGTH_LONG);
             noTrack.show();
         }
+    }
+
+    public void onClickSearchSpotify(View view) {
+
+        if (playerState == 1) {
+            pause(view); playerState = 2;
+        }
+
+        Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
+        searchIntent.putExtra("Access", ACCESS_TOKEN);
+
+        MainActivity.this.startActivity(searchIntent);
     }
 }
