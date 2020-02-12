@@ -50,8 +50,7 @@
         android:id="@+id/changePlayerState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="584dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginTop="375dp"
         android:width="100dp"
         android:onClick="onClickChangePlayerState"
         android:text="Play"
@@ -91,9 +90,13 @@
         android:id="@+id/searchSpotify"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="420dp"
+        android:layout_marginBottom="225dp"
         android:onClick="onClickSearchSpotify"
         android:text="@android:string/search_go"
-        tools:layout_editor_absoluteX="55dp"
-        tools:layout_editor_absoluteY="473dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

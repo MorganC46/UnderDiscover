@@ -43,7 +43,7 @@ public class MetadataActivity extends AppCompatActivity {
 
     }
 
-    protected void onClickReturnToMain(View view) {
+    public void onClickReturnToMain(View view) {
         finish();
     }
 
@@ -80,7 +80,7 @@ public class MetadataActivity extends AppCompatActivity {
             @Override
             public void run() {
                 MetaDataListAdapter metadataAdapter = new MetaDataListAdapter(context, attributeList.toArray(new String[0]), R.layout.listview_metadata);
-                ListView metadataList = findViewById(R.id.attributeListView);
+                ListView metadataList = findViewById(R.id.attributeList);
                 metadataList.setAdapter(metadataAdapter);
             }
         });
