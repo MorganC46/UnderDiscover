@@ -1,15 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/artistName"
+        android:layout_width="260dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/trackName"
+        android:layout_marginLeft="2dp"
+        android:layout_toRightOf="@id/trackImage"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/trackImage"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:adjustViewBounds="false"
+        app:srcCompat="@android:drawable/screen_background_light" />
+
+    <TextView
         android:id="@+id/trackName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center|center_horizontal|center_vertical"
-        android:paddingLeft="50dp"
-        android:paddingBottom="10dp"
-        android:text="Name"
-        android:textSize="24sp" />
-</LinearLayout>
+        android:layout_width="260dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="2dp"
+        android:layout_toRightOf="@id/trackImage"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="TextView"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/playTrack"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_toRightOf="@id/trackName"
+        android:text="Play"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/getMetaData"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/playTrack"
+        android:layout_toRightOf="@id/artistName"
+        android:text="metadata"
+        android:textSize="8sp" />
+
+</RelativeLayout>

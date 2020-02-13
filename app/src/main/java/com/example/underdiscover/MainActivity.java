@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
 
                 String[] trackUri = playerState.track.uri.split(":");
 
-                Log.d("TESTING", playerState.track.uri);
                 metaDataIntent.putExtra("TrackID", trackUri[2]);
                 metaDataIntent.putExtra("Access", ACCESS_TOKEN);
                 metaDataIntent.putExtra("TrackName", playerState.track.name + " by " + playerState.track.artist.name);
