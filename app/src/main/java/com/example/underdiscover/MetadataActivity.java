@@ -55,8 +55,6 @@ public class MetadataActivity extends AppCompatActivity {
             String[] variable = resultArray[count].split(":");
             variable[0] = variable[0].replaceAll("\\s", "").replaceAll("\"", "");
 
-            Log.d("TESTING", variable[0]);
-
             if (variable[0].equals("danceability") || variable[0].equals("energy") || variable[0].equals("speechiness") ||
                     variable[0].equals("valence") || variable[0].equals("acousticness")) {
                 double oneToHundred = (Double.parseDouble(variable[1]))*100;

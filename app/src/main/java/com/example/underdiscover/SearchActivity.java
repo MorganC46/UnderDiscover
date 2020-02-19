@@ -19,6 +19,8 @@ import java.util.concurrent.ExecutionException;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,25 +46,32 @@ public class SearchActivity extends AppCompatActivity {
 
     public void onClickSearchExecute(View view) {
 
-        InputMethodManager inputManager = (InputMethodManager)
-                getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
-
         EditText textBox = findViewById(R.id.searchTextBox);
-        String searchRequest = textBox.getText().toString().replaceAll(" ", "+");
-        String query = "q=" + searchRequest + "&type=track"; //TODO: Manipulate searchRequest to create query
+        if (textBox.getText().toString().equals("")) {
+            Snackbar noText = Snackbar.make(view, "Please enter a search query!", Snackbar.LENGTH_LONG);
+            noText.show();
+        }
 
-        final String apiUrl = SEARCH_URL + query;
+        else {
+            InputMethodManager inputManager = (InputMethodManager)
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        try {
-            String result = new GenericHttpRequests.HttpRequest(apiUrl, getIntent().getStringExtra("Access")).execute().get();
-            dealWithResult(result, textBox.getText().toString());
-        } catch (ExecutionException e) {
-            //TODO: Handle Exception
-        } catch (InterruptedException e) {
-            //TODO: Handle Exception
+            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+
+            String searchRequest = textBox.getText().toString().replaceAll(" ", "+");
+            String query = "q=" + searchRequest + "&type=track"; //TODO: Manipulate searchRequest to create query
+
+            final String apiUrl = SEARCH_URL + query;
+
+            try {
+                String result = new GenericHttpRequests.HttpRequest(apiUrl, getIntent().getStringExtra("Access")).execute().get();
+                dealWithResult(result, textBox.getText().toString());
+            } catch (ExecutionException e) {
+                //TODO: Handle Exception
+            } catch (InterruptedException e) {
+                //TODO: Handle Exception
+            }
         }
     }
 

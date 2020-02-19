@@ -33,12 +33,12 @@
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/playTrack"
-        android:layout_width="70dp"
-        android:layout_height="40dp"
-        android:layout_toRightOf="@id/trackName"
-        android:text="Play"
-        android:textSize="16sp" />
+    android:id="@+id/playTrack"
+    android:layout_width="70dp"
+    android:layout_height="40dp"
+    android:layout_toRightOf="@id/trackName"
+    android:text="Play"
+    android:textSize="16sp" />
 
     <Button
         android:id="@+id/getMetaData"
