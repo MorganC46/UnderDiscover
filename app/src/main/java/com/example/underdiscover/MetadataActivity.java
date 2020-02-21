@@ -77,7 +77,9 @@ public class MetadataActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                MetaDataListAdapter metadataAdapter = new MetaDataListAdapter(context, attributeList.toArray(new String[0]), R.layout.listview_metadata);
+                MetaDataListAdapter metadataAdapter = new MetaDataListAdapter(context, attributeList.toArray(new String[0])
+                        , R.layout.listview_metadata, getIntent().getStringExtra("TrackID"), getIntent().getStringExtra("Access"));
+
                 ListView metadataList = findViewById(R.id.attributeList);
                 metadataList.setAdapter(metadataAdapter);
             }

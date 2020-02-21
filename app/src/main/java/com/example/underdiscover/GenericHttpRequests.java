@@ -1,5 +1,6 @@
 package com.example.underdiscover;
 
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
 import java.io.BufferedReader;
@@ -55,6 +56,32 @@ public class GenericHttpRequests {
             return null;
         }
     }
+
+    public static class ImageRequest extends AsyncTask<Void, Void, Drawable> {
+
+        String imageUrl;
+
+        protected ImageRequest(String imageUrl) {
+            this.imageUrl = imageUrl;
+        }
+
+        protected Drawable doInBackground(Void... params) {
+            try {
+                InputStream imageInput = (InputStream) new URL(imageUrl).getContent();
+                Drawable imageDrawable = Drawable.createFromStream(imageInput, "artwork");
+                return imageDrawable;
+            } catch (MalformedURLException eURL) {
+                eURL.printStackTrace();
+                System.exit(1);
+            } catch (IOException eIO) {
+                eIO.printStackTrace();
+                System.exit(2);
+            }
+            return null;
+        }
+    }
+
+
     protected static String streamIntoString(InputStream stream) {
         //Method to process and correctly separate input streams
         try {

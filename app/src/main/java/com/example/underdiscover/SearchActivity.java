@@ -3,17 +3,12 @@ package com.example.underdiscover;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -75,30 +70,6 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    protected class ImageRequest extends AsyncTask<Void, Void, Drawable> {
-
-        String imageUrl;
-
-        protected ImageRequest(String imageUrl) {
-            this.imageUrl = imageUrl;
-        }
-
-        protected Drawable doInBackground(Void... params) {
-            try {
-                InputStream imageInput = (InputStream) new URL(imageUrl).getContent();
-                Drawable imageDrawable = Drawable.createFromStream(imageInput, "artwork");
-                return imageDrawable;
-            } catch (MalformedURLException eURL) {
-                eURL.printStackTrace();
-                System.exit(1);
-            } catch (IOException eIO) {
-                eIO.printStackTrace();
-                System.exit(2);
-            }
-            return null;
-        }
-    }
-
         protected void dealWithResult(String result, String check) {
 
             try {
@@ -127,7 +98,7 @@ public class SearchActivity extends AppCompatActivity {
 
                             String imageUrl = trackList.getJSONObject(count).getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url");
                             try {
-                                imageList.add(new ImageRequest(imageUrl).execute().get());
+                                imageList.add(new GenericHttpRequests.ImageRequest(imageUrl).execute().get());
                             } catch (ExecutionException e) {
                                 //TODO: Handle Exception
                             } catch (InterruptedException e) {
@@ -140,8 +111,8 @@ public class SearchActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        SearchListAdapter searchAdapter = new SearchListAdapter(context, trackNameList.toArray(new String[0]), artistNameList.toArray(new String[0]),
-                                imageList.toArray(new Drawable[0]), trackUriList.toArray(new String[0]), R.layout.listview_search);
+                        TrackListAdapter searchAdapter = new TrackListAdapter(context, trackNameList.toArray(new String[0]), artistNameList.toArray(new String[0]),
+                                imageList.toArray(new Drawable[0]), trackUriList.toArray(new String[0]), R.layout.listview_track);
                         ListView searchList = findViewById(R.id.searchList);
                         searchList.setAdapter(searchAdapter);
                     }

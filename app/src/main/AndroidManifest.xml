@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MetadataActivity"></activity>
+        <activity android:name=".RecommendResultActivity"></activity>
         <activity android:name=".SearchActivity"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".MainActivity">

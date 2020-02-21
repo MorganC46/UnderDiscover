@@ -2,6 +2,7 @@ package com.example.underdiscover;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,18 +14,27 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import java.util.concurrent.ExecutionException;
+
 public class MetaDataListAdapter extends ArrayAdapter {
+
+    private static final String RECOMMEND_URL = "https://api.spotify.com/v1/recommendations?";
 
     protected Activity context;
     private int layoutFile;
     private String[] metadata;
+    private String trackId;
+    private String accessToken;
 
-    protected MetaDataListAdapter(Activity context, String[] metadata, int layoutFile) {
+    protected MetaDataListAdapter(Activity context, String[] metadata, int layoutFile,
+                                  String trackId, String accessToken) {
         super(context, layoutFile, metadata);
 
         this.context = context;
         this.metadata = metadata;
         this.layoutFile = layoutFile;
+        this.trackId = trackId;
+        this.accessToken = accessToken;
     }
 
     public View getView(int count, View view, ViewGroup viewGroup) {
@@ -58,6 +68,31 @@ public class MetaDataListAdapter extends ArrayAdapter {
         recommendationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String attributeName = metadata[count].split(":")[0].toLowerCase();
+                double attributeValue = 1;
+
+                String attributeValueString = metadata[count].split(":")[1].replaceAll("\"", "");
+
+                if (attributeName.equals("danceability") || attributeName.equals("energy") || attributeName.equals("speechiness") ||
+                        attributeName.equals("valence") || attributeName.equals("acousticness")) {
+                    attributeValue = Double.parseDouble(attributeValueString) / 100;
+                }
+                if (attributeName.equals("loudness") || attributeName.equals("tempo")) {
+                    attributeValue = Double.parseDouble(attributeValueString.split(" ")[0]);
+                }
+
+                String query = RECOMMEND_URL + "limit=10&market=US&seed_tracks=" + trackId + "&min_" +
+                        attributeName + "=" + (attributeValue-(attributeValue*0.1)) + "&max_" +
+                        attributeName + "=" + (attributeValue+(attributeValue*0.1)) + "&target_" +
+                        attributeName + "=" + attributeValue;
+
+                Log.d("TESTING", query);
+
+//                Intent metaDataIntent = new Intent(context, RecommendResultActivity.class);
+//                metaDataIntent.putExtra(query, "Query");
+//                metaDataIntent.putExtra(accessToken, "Access");
+//                context.startActivity(metaDataIntent);
 
             }
         });

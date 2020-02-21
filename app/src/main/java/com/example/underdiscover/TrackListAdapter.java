@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SearchListAdapter extends ArrayAdapter {
+public class TrackListAdapter extends ArrayAdapter {
 
     protected Activity context;
     private int layoutFile;
@@ -20,7 +20,7 @@ public class SearchListAdapter extends ArrayAdapter {
     private Drawable[] image;
     private String[] uri;
 
-    protected SearchListAdapter(Activity context, String[] trackName, String[] artistName, Drawable[] image, String[] uri, int layoutFile) {
+    protected TrackListAdapter(Activity context, String[] trackName, String[] artistName, Drawable[] image, String[] uri, int layoutFile) {
         super(context, layoutFile, trackName);
 
         this.context = context;

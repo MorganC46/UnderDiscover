@@ -27,7 +27,7 @@
         android:layout_marginRight="40dp"
         android:layout_marginBottom="500dp"
         android:gravity="center"
-        android:text="Search by track name"
+        android:text="We think you'll like the following..."
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,27 +35,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.089" />
 
-    <EditText
-        android:id="@+id/searchTextBox"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/searchExecute"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ListView
-        android:id="@+id/searchList"
+        android:id="@+id/resultList"
         android:layout_width="407dp"
-        android:layout_height="395dp"
+        android:layout_height="500dp"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="40dp"
         android:divider="#000000"
@@ -63,19 +46,6 @@
         app:layout_constraintBottom_toTopOf="@+id/returnToMain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchExecute" />
+        app:layout_constraintTop_toBottomOf="@+id/resultTitle" />
 
-    <Button
-        android:id="@+id/searchExecute"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:layout_marginBottom="548dp"
-        android:onClick="onClickSearchExecute"
-        android:text="@android:string/search_go"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
