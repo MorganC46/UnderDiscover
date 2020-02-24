@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 public class GenericHttpRequests {
@@ -22,6 +23,20 @@ public class GenericHttpRequests {
             this.apiUrl = apiUrl;
             this.accessToken = accessToken;
         }
+
+        // DEBUG FUNCTION
+
+//        protected static boolean isUrlValid(String url) {
+//            try {
+//                URL obj = new URL(url);
+//                obj.toURI();
+//                return true;
+//            } catch (MalformedURLException e) {
+//                return false;
+//            } catch (URISyntaxException e) {
+//                return false;
+//            }
+//        }
 
         //Connection method
         protected String doInBackground(Void... params) {

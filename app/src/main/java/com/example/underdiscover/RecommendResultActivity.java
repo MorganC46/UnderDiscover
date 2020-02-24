@@ -3,6 +3,7 @@ package com.example.underdiscover;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,8 +43,7 @@ public class RecommendResultActivity extends AppCompatActivity {
 
         try {
             JSONObject jsonResp = new JSONObject(result);
-            JSONObject list = jsonResp.optJSONObject("tracks");
-            JSONArray trackList = (JSONArray) list.get("items");
+            JSONArray trackList = (JSONArray) jsonResp.get("tracks");
 
             ArrayList<String> trackNameList = new ArrayList<String>();
             ArrayList<String> artistNameList = new ArrayList<String>();
@@ -87,6 +87,9 @@ public class RecommendResultActivity extends AppCompatActivity {
             e.printStackTrace();
             System.exit(3);
         }
+          catch (NullPointerException e) {
+            //TODO: HANDLE EXCEPTION
+          }
 
     }
 

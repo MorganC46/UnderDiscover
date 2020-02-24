@@ -70,6 +70,7 @@ public class MetaDataListAdapter extends ArrayAdapter {
             public void onClick(View v) {
 
                 String attributeName = metadata[count].split(":")[0].toLowerCase();
+                String query = "";
                 double attributeValue = 1;
 
                 String attributeValueString = metadata[count].split(":")[1].replaceAll("\"", "");
@@ -79,20 +80,27 @@ public class MetaDataListAdapter extends ArrayAdapter {
                     attributeValue = Double.parseDouble(attributeValueString) / 100;
                 }
                 if (attributeName.equals("loudness") || attributeName.equals("tempo")) {
+                    attributeValueString = attributeValueString.split(" ")[1];
                     attributeValue = Double.parseDouble(attributeValueString.split(" ")[0]);
                 }
 
-                String query = RECOMMEND_URL + "limit=10&market=US&seed_tracks=" + trackId + "&min_" +
-                        attributeName + "=" + (attributeValue-(attributeValue*0.1)) + "&max_" +
-                        attributeName + "=" + (attributeValue+(attributeValue*0.1)) + "&target_" +
-                        attributeName + "=" + attributeValue;
+                if (attributeName.equals("loudness")) {
+                    query = RECOMMEND_URL + "limit=10&market=US&seed_tracks=" + trackId + "&min_" +
+                            attributeName + "=" + (attributeValue+(attributeValue*0.1)) + "&max_" +
+                            attributeName + "=" + (attributeValue-(attributeValue*0.1)) + "&target_" +
+                            attributeName + "=" + attributeValue;
+                }
+                else {
+                    query = RECOMMEND_URL + "limit=10&market=US&seed_tracks=" + trackId + "&min_" +
+                            attributeName + "=" + (attributeValue-(attributeValue*0.1)) + "&max_" +
+                            attributeName + "=" + (attributeValue+(attributeValue*0.1)) + "&target_" +
+                            attributeName + "=" + attributeValue;
+                }
 
-                Log.d("TESTING", query);
-
-//                Intent metaDataIntent = new Intent(context, RecommendResultActivity.class);
-//                metaDataIntent.putExtra(query, "Query");
-//                metaDataIntent.putExtra(accessToken, "Access");
-//                context.startActivity(metaDataIntent);
+                Intent recommendResultIntent = new Intent(context, RecommendResultActivity.class);
+                recommendResultIntent.putExtra("Query", query);
+                recommendResultIntent.putExtra("Access", accessToken);
+                context.startActivity(recommendResultIntent);
 
             }
         });
