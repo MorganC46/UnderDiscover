@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +21,9 @@ import java.util.concurrent.ExecutionException;
 public class RecommendResultActivity extends AppCompatActivity {
 
     private Activity context;
+    private int numberOfResults;
+    private int toDisplay;
+    private TrackListAdapter searchAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +31,7 @@ public class RecommendResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recommend_result);
 
         this.context = this;
+        this.numberOfResults = 0;
 
         try {
             String result = new GenericHttpRequests.HttpRequest(getIntent().getStringExtra("Query"), getIntent().getStringExtra("Access")).execute().get();
@@ -44,13 +51,17 @@ public class RecommendResultActivity extends AppCompatActivity {
         try {
             JSONObject jsonResp = new JSONObject(result);
             JSONArray trackList = (JSONArray) jsonResp.get("tracks");
+            numberOfResults = trackList.length();
+
+            TextView title = findViewById(R.id.resultTitle);
+            title.setText("We found " + numberOfResults + " tracks we think you will like...");
 
             ArrayList<String> trackNameList = new ArrayList<String>();
             ArrayList<String> artistNameList = new ArrayList<String>();
             ArrayList<Drawable> imageList = new ArrayList<Drawable>();
             ArrayList<String> trackUriList = new ArrayList<String>();
 
-            for (int count = 0; count < trackList.length(); count++) {
+            for (int count = 0; count < numberOfResults; count++) {
                 if (trackList.getJSONObject(count).getString("type").equals("track")) {
 
                     String trackOutput = trackList.getJSONObject(count).getString("name");
@@ -77,9 +88,32 @@ public class RecommendResultActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    TrackListAdapter searchAdapter = new TrackListAdapter(context, trackNameList.toArray(new String[0]), artistNameList.toArray(new String[0]),
-                            imageList.toArray(new Drawable[0]), trackUriList.toArray(new String[0]), R.layout.listview_track);
+
+                    if (numberOfResults <= 9) { toDisplay = numberOfResults-1; }
+                    else { toDisplay = 9; }
+
+                    searchAdapter = new TrackListAdapter(context, trackNameList.subList(0,toDisplay).toArray(new String[0]), artistNameList.subList(0,toDisplay).toArray(new String[0]),
+                            imageList.subList(0,toDisplay).toArray(new Drawable[0]), trackUriList.subList(0,toDisplay).toArray(new String[0]), R.layout.listview_track);
                     ListView searchList = findViewById(R.id.resultList);
+
+                    Button loadMore = new Button(context);
+                    loadMore.setText("Load more recommendations...");
+
+                    loadMore.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            if (numberOfResults <= toDisplay+10) { toDisplay = numberOfResults-(toDisplay-1); }
+                            else {toDisplay = toDisplay+10; }
+
+                            searchAdapter = new TrackListAdapter(context, trackNameList.subList(0,toDisplay).toArray(new String[0]), artistNameList.subList(0,toDisplay).toArray(new String[0]),
+                                    imageList.subList(0,toDisplay).toArray(new Drawable[0]), trackUriList.subList(0,toDisplay).toArray(new String[0]), R.layout.listview_track);
+                            searchList.setAdapter(searchAdapter);
+                            searchAdapter.notifyDataSetChanged();
+                        }
+                    });
+
+                    searchList.addFooterView(loadMore);
                     searchList.setAdapter(searchAdapter);
                 }
             });
