@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,7 +56,8 @@ public class RecommendResultActivity extends AppCompatActivity {
             numberOfResults = trackList.length();
 
             TextView title = findViewById(R.id.resultTitle);
-            title.setText("We found " + numberOfResults + " tracks we think you will like...");
+            if (numberOfResults == 100) { title.setText("We found over 100 tracks we think you will like..."); }
+            else { title.setText("We found " + numberOfResults + " tracks we think you will like..."); }
 
             ArrayList<String> trackNameList = new ArrayList<String>();
             ArrayList<String> artistNameList = new ArrayList<String>();
@@ -90,7 +93,7 @@ public class RecommendResultActivity extends AppCompatActivity {
                 public void run() {
 
                     if (numberOfResults <= 9) { toDisplay = numberOfResults-1; }
-                    else { toDisplay = 9; }
+                    else { toDisplay = 10; }
 
                     searchAdapter = new TrackListAdapter(context, trackNameList.subList(0,toDisplay).toArray(new String[0]), artistNameList.subList(0,toDisplay).toArray(new String[0]),
                             imageList.subList(0,toDisplay).toArray(new Drawable[0]), trackUriList.subList(0,toDisplay).toArray(new String[0]), R.layout.listview_track);
@@ -103,13 +106,25 @@ public class RecommendResultActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
 
-                            if (numberOfResults <= toDisplay+10) { toDisplay = numberOfResults-(toDisplay-1); }
-                            else {toDisplay = toDisplay+10; }
+                            if (toDisplay == numberOfResults) {
+                                Snackbar allResultsShown = Snackbar.make(findViewById(R.id.resultList), "No further recommendations to show!", Snackbar.LENGTH_LONG);
+                                allResultsShown.show();
+                            }
 
-                            searchAdapter = new TrackListAdapter(context, trackNameList.subList(0,toDisplay).toArray(new String[0]), artistNameList.subList(0,toDisplay).toArray(new String[0]),
-                                    imageList.subList(0,toDisplay).toArray(new Drawable[0]), trackUriList.subList(0,toDisplay).toArray(new String[0]), R.layout.listview_track);
-                            searchList.setAdapter(searchAdapter);
-                            searchAdapter.notifyDataSetChanged();
+                            else {
+
+                                if (numberOfResults < toDisplay+10) { toDisplay = numberOfResults; }
+                                else {toDisplay = toDisplay+10; }
+
+                                searchAdapter = new TrackListAdapter(context, trackNameList.subList(0,toDisplay).toArray(new String[0]), artistNameList.subList(0,toDisplay).toArray(new String[0]),
+                                        imageList.subList(0,toDisplay).toArray(new Drawable[0]), trackUriList.subList(0,toDisplay).toArray(new String[0]), R.layout.listview_track);
+
+                                searchList.setAdapter(searchAdapter);
+                                if ((toDisplay % 10) != 0) { searchList.setSelection(toDisplay-(16-(10-(toDisplay % 10)))); }
+                                else { searchList.setSelection(toDisplay-16); }
+                                searchAdapter.notifyDataSetChanged();
+
+                            }
                         }
                     });
 

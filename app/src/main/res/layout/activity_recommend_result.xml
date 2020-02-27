@@ -9,7 +9,7 @@
         android:id="@+id/returnToMain"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="2dp"
         android:onClick="onClickReturnToMain"
         android:text="RETURN TO HOME"
         app:layout_constraintBottom_toBottomOf="parent"

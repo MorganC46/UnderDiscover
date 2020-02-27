@@ -7,13 +7,13 @@
     <TextView
         android:id="@+id/artistName"
         android:layout_width="260dp"
-        android:layout_height="35dp"
+        android:layout_height="32.5dp"
         android:layout_below="@id/trackName"
         android:layout_marginLeft="2dp"
         android:layout_toRightOf="@id/trackImage"
         android:gravity="center_horizontal|center_vertical"
         android:text="TextView"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
     <ImageView
         android:id="@+id/trackImage"
@@ -25,12 +25,12 @@
     <TextView
         android:id="@+id/trackName"
         android:layout_width="260dp"
-        android:layout_height="40dp"
+        android:layout_height="42.5dp"
         android:layout_marginLeft="2dp"
         android:layout_toRightOf="@id/trackImage"
         android:gravity="center_horizontal|center_vertical"
         android:text="TextView"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
     <Button
     android:id="@+id/playTrack"

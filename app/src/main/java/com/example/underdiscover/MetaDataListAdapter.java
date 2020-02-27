@@ -85,13 +85,13 @@ public class MetaDataListAdapter extends ArrayAdapter {
                 }
 
                 if (attributeName.equals("loudness")) {
-                    query = RECOMMEND_URL + "market=US&seed_tracks=" + trackId + "&min_" +
+                    query = RECOMMEND_URL + "limit=100&market=US&seed_tracks=" + trackId + "&min_" +
                             attributeName + "=" + (attributeValue+(attributeValue*0.1)) + "&max_" +
                             attributeName + "=" + (attributeValue-(attributeValue*0.1)) + "&target_" +
                             attributeName + "=" + attributeValue;
                 }
                 else {
-                    query = RECOMMEND_URL + "market=US&seed_tracks=" + trackId + "&min_" +
+                    query = RECOMMEND_URL + "limit=100&market=US&seed_tracks=" + trackId + "&min_" +
                             attributeName + "=" + (attributeValue-(attributeValue*0.1)) + "&max_" +
                             attributeName + "=" + (attributeValue+(attributeValue*0.1)) + "&target_" +
                             attributeName + "=" + attributeValue;

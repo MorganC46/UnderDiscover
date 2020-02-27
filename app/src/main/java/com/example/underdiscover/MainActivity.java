@@ -34,9 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private String ACCESS_TOKEN;
 
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        setTitle("UnderDiscover");
 
         if (isNetworkAvailable() == false) {
             Snackbar noInternet = Snackbar.make(findViewById(R.id.text), "No Network Detected", Snackbar.LENGTH_INDEFINITE);
@@ -45,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         else {
             authenticateSpotify(); //TODO: Do this before the main activity is created - possibly in separate activity?
         }
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        setTitle("UnderDiscover");
     }
 
     @Override
