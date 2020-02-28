@@ -60,7 +60,7 @@ public class SearchActivity extends AppCompatActivity {
             final String apiUrl = SEARCH_URL + query;
 
             try {
-                String result = new GenericHttpRequests.HttpRequest(apiUrl, getIntent().getStringExtra("Access")).execute().get();
+                String result = new GenericHttpRequests.HttpRequestGet(apiUrl, getIntent().getStringExtra("Access")).execute().get();
                 dealWithResult(result, textBox.getText().toString());
             } catch (ExecutionException e) {
                 //TODO: Handle Exception

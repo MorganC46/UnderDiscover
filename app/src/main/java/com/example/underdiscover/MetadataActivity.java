@@ -31,7 +31,7 @@ public class MetadataActivity extends AppCompatActivity {
         this.context = this;
 
         try {
-            String result = new GenericHttpRequests.HttpRequest(apiUrl, getIntent().getStringExtra("Access")).execute().get();
+            String result = new GenericHttpRequests.HttpRequestGet(apiUrl, getIntent().getStringExtra("Access")).execute().get();
             dealWithResult(result);
         }
         catch(ExecutionException e) {

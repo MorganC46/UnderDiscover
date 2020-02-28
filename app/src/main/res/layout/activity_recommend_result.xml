@@ -7,14 +7,26 @@
 
     <Button
         android:id="@+id/returnToMain"
-        android:layout_width="300dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="4dp"
         android:onClick="onClickReturnToMain"
         android:text="RETURN TO HOME"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.904"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/addToPlaylist"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:onClick="onClickAddToPlaylist"
+        android:text="CREATE PLAYLIST"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.095"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
