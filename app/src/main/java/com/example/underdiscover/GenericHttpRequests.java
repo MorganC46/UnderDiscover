@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -115,24 +116,29 @@ public class GenericHttpRequests {
                 urlConn.setRequestProperty("Authorization", "Bearer " + accessToken);
                 urlConn.setDoOutput(true);
 
-                out = new BufferedOutputStream(urlConn.getOutputStream());
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+                out = urlConn.getOutputStream();
 
                 if (appendQueryParams == null) {
-                    writer.write(getDataString(createQueryParams));
+                    String convert = new JSONObject(createQueryParams).toString();
+                    convert = convert.replaceAll("\"", "\\\\\"");
+                    System.out.println(convert);
+                    out.write(convert.getBytes("UTF-8"));
                 }
 
                 else if (createQueryParams == null) {
-                    writer.write(appendQueryParams.toString());
+                    System.out.println(appendQueryParams.toString());
+                    out.write(appendQueryParams.toString().getBytes());
                 }
 
-                Log.d("TESTING", result);
+                out.close();
 
-                writer.flush(); writer.close(); out.close();
 
                 if (urlConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     result = streamIntoString(urlConn.getInputStream());
                     return result;
+                }
+                else {
+                    System.out.println(urlConn.getURL());
                 }
             }
 
@@ -151,25 +157,25 @@ public class GenericHttpRequests {
         }
     }
 
-    //PIECE OF CODE WRITTEN BY FAHIM, STACK OVERFLOW
-    //https://stackoverflow.com/questions/9767952/how-to-add-parameters-to-httpurlconnection-using-post-using-namevaluepair/29561084#29561084
-
-    private static String getDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for(Map.Entry<String, String> entry : params.entrySet()){
-            if (first)
-                first = false;
-            else
-                result.append("&");
-
-            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-        }
-
-        return result.toString();
-    }
+//    //PIECE OF CODE WRITTEN BY FAHIM, STACK OVERFLOW
+//    //https://stackoverflow.com/questions/9767952/how-to-add-parameters-to-httpurlconnection-using-post-using-namevaluepair/29561084#29561084
+//
+//    private static String getDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
+//        StringBuilder result = new StringBuilder();
+//        boolean first = true;
+//        for(Map.Entry<String, String> entry : params.entrySet()){
+//            if (first)
+//                first = false;
+//            else
+//                result.append("&");
+//
+//            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+//            result.append("=");
+//            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+//        }
+//
+//        return result.toString();
+//    }
 
     public static class ImageRequest extends AsyncTask<Void, Void, Drawable> {
 

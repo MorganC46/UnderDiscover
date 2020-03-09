@@ -158,13 +158,14 @@ public class RecommendResultActivity extends AppCompatActivity {
         HashMap<String, String> newPlayListRequestBody = new HashMap<String, String>() {{
             put("name", "UnderDiscover Recommends");
             put("description", "Here is the playlist you requested from our recommendations! Enjoy!");
+            put("public", "false");
         }};
 
         try {
             String playlistId = new GenericHttpRequests.HttpRequestPost(newPlaylistQuery, getIntent().getStringExtra("Access"),
                     newPlayListRequestBody, null).execute().get();
 
-//            Log.d("TESTING", playlistId);
+            System.out.println(playlistId);
 
 //            String appendPlaylistQuery = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks";
 //            JSONArray jsUriArray = new JSONArray(trackUriList);
