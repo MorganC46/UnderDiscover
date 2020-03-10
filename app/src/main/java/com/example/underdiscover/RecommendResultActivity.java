@@ -1,6 +1,8 @@
 package com.example.underdiscover;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -153,16 +155,46 @@ public class RecommendResultActivity extends AppCompatActivity {
 
     }
 
-    private JSONObject dealWithPlaylistCreateResult(String result) {
+    public void onClickAddToPlaylist(View v) {
+
+        String playlistQuery = "https://api.spotify.com/v1/users/" + returnUserId() + "/playlists";
+
         try {
-            return new JSONObject(result);
-        }catch (JSONException e) {
-            //TODO: Handle Exception
+            String playlistOutput = new GenericHttpRequests.HttpRequestGet(playlistQuery, getIntent().getStringExtra("Access")).execute().get();
+            JSONObject jsonResp = new JSONObject(playlistOutput);
+            JSONArray plList = (JSONArray) jsonResp.get("items");
+
+            ArrayList<String> playlistNames = new ArrayList<>();
+            ArrayList<String> playlistIDs = new ArrayList<>();
+
+            for (int count = 0; count < plList.length(); count++) {
+                if (plList.getJSONObject(count).getJSONObject("owner").getString("id").equals(returnUserId())) {
+                    playlistNames.add(plList.getJSONObject(count).getString("name"));
+                    playlistIDs.add(plList.getJSONObject(count).getString("id"));
+                }
+            }
+
+            AlertDialog.Builder selectPlaylist = new AlertDialog.Builder(this);
+            selectPlaylist.setTitle("Select a playlist to add to!");
+            selectPlaylist.setItems(playlistNames.toArray(new String[0]), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int chosen) {
+                    System.out.println(playlistIDs.get(chosen));
+                    addSongsToPlaylist("https://api.spotify.com/v1/playlists/" + playlistIDs.get(chosen));
+                }
+            });
+            selectPlaylist.show();
+
+        } catch (ExecutionException e) {
+        //TODO: Handle Exception
+        } catch (InterruptedException e) {
+        //TODO: Handle Exception
+        } catch (JSONException e) {
+
         }
-        return null;
     }
 
-    public void onClickAddToPlaylist(View v) {
+    public void onClickCreateNewPlaylist(View v) {
 
         String newPlaylistQuery = "https://api.spotify.com/v1/users/" + returnUserId() + "/playlists";
 
@@ -175,9 +207,22 @@ public class RecommendResultActivity extends AppCompatActivity {
             String playlistId = new GenericHttpRequests.HttpRequestPost(newPlaylistQuery, getIntent().getStringExtra("Access"),
                     newPlaylistObject.toString(), null).execute().get();
 
-            String appendPlaylistQuery = playlistId + "/tracks";
-            JSONArray jsUriArray = new JSONArray(trackUriList);
+            addSongsToPlaylist(playlistId);
 
+        } catch (ExecutionException e) {
+            //TODO: Handle Exception
+        } catch (InterruptedException e) {
+            //TODO: Handle Exception
+        } catch (JSONException e) {
+            //TODO: Handle
+        }
+    }
+
+    private void addSongsToPlaylist(String playlistId) {
+        String appendPlaylistQuery = playlistId + "/tracks";
+        JSONArray jsUriArray = new JSONArray(trackUriList);
+
+        try {
             String snapshotId = new GenericHttpRequests.HttpRequestPost(appendPlaylistQuery, getIntent().getStringExtra("Access"),
                     null, jsUriArray).execute().get();
 
@@ -186,18 +231,14 @@ public class RecommendResultActivity extends AppCompatActivity {
                 newPlaylistNotCreated.show();
             }
             else {
-                Snackbar newPlaylistCreated = Snackbar.make(findViewById(R.id.resultList), "Playlist created!", Snackbar.LENGTH_LONG);
+                Snackbar newPlaylistCreated = Snackbar.make(findViewById(R.id.resultList), "We've created your recommendation list! Check it out!", Snackbar.LENGTH_LONG);
                 newPlaylistCreated.show();
             }
 
-
         } catch (ExecutionException e) {
             //TODO: Handle Exception
-
         } catch (InterruptedException e) {
             //TODO: Handle Exception
-        } catch (JSONException e) {
-            //TODO: Handle
         }
     }
 
