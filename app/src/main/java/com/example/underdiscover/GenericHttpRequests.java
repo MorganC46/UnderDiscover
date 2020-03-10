@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
@@ -21,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.Buffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -88,10 +90,10 @@ public class GenericHttpRequests {
 
         String apiUrl;
         String accessToken;
-        HashMap<String, String> createQueryParams;
+        String createQueryParams;
         JSONArray appendQueryParams;
 
-        public HttpRequestPost(String apiUrl, String accessToken, HashMap<String, String> createQueryParams,
+        public HttpRequestPost(String apiUrl, String accessToken, String createQueryParams,
                                JSONArray appendQueryParams) {
             this.apiUrl = apiUrl;
             this.accessToken = accessToken;
@@ -119,26 +121,20 @@ public class GenericHttpRequests {
                 out = urlConn.getOutputStream();
 
                 if (appendQueryParams == null) {
-                    String convert = new JSONObject(createQueryParams).toString();
-                    convert = convert.replaceAll("\"", "\\\\\"");
-                    System.out.println(convert);
-                    out.write(convert.getBytes("UTF-8"));
+                    out.write(createQueryParams.getBytes());
+                    if (urlConn.getResponseCode() == HttpURLConnection.HTTP_OK || urlConn.getResponseCode() == HttpURLConnection.HTTP_CREATED) {
+                        result = urlConn.getHeaderField("Location");
+                        out.close();
+                        return result;
+                    }
                 }
-
                 else if (createQueryParams == null) {
-                    System.out.println(appendQueryParams.toString());
                     out.write(appendQueryParams.toString().getBytes());
-                }
-
-                out.close();
-
-
-                if (urlConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    result = streamIntoString(urlConn.getInputStream());
-                    return result;
-                }
-                else {
-                    System.out.println(urlConn.getURL());
+                    if (urlConn.getResponseCode() == HttpURLConnection.HTTP_OK || urlConn.getResponseCode() == HttpURLConnection.HTTP_CREATED) {
+                        result = streamIntoString(urlConn.getInputStream());
+                        out.close();
+                        return result;
+                    }
                 }
             }
 

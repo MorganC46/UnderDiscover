@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +42,7 @@ public class RecommendResultActivity extends AppCompatActivity {
 
         try {
             String result = new GenericHttpRequests.HttpRequestGet(getIntent().getStringExtra("Query"), getIntent().getStringExtra("Access")).execute().get();
-            dealWithResult(result);
+            dealWithRecommendedResult(result);
         } catch (ExecutionException e) {
             //TODO: Handle Exception
         } catch (InterruptedException e) {
@@ -50,7 +51,7 @@ public class RecommendResultActivity extends AppCompatActivity {
 
     }
 
-    protected void dealWithResult(String result) {
+    protected void dealWithRecommendedResult(String result) {
 
         try {
             JSONObject jsonResp = new JSONObject(result);
@@ -152,35 +153,42 @@ public class RecommendResultActivity extends AppCompatActivity {
 
     }
 
+    private JSONObject dealWithPlaylistCreateResult(String result) {
+        try {
+            return new JSONObject(result);
+        }catch (JSONException e) {
+            //TODO: Handle Exception
+        }
+        return null;
+    }
+
     public void onClickAddToPlaylist(View v) {
 
         String newPlaylistQuery = "https://api.spotify.com/v1/users/" + returnUserId() + "/playlists";
-        HashMap<String, String> newPlayListRequestBody = new HashMap<String, String>() {{
-            put("name", "UnderDiscover Recommends");
-            put("description", "Here is the playlist you requested from our recommendations! Enjoy!");
-            put("public", "false");
-        }};
 
         try {
+
+            JSONObject newPlaylistObject = new JSONObject();
+            newPlaylistObject.put("name", "UnderDiscover Recommends");
+            newPlaylistObject.put("description", "Here is the playlist you requested from our recommendations! Enjoy!");
+
             String playlistId = new GenericHttpRequests.HttpRequestPost(newPlaylistQuery, getIntent().getStringExtra("Access"),
-                    newPlayListRequestBody, null).execute().get();
+                    newPlaylistObject.toString(), null).execute().get();
 
-            System.out.println(playlistId);
+            String appendPlaylistQuery = playlistId + "/tracks";
+            JSONArray jsUriArray = new JSONArray(trackUriList);
 
-//            String appendPlaylistQuery = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks";
-//            JSONArray jsUriArray = new JSONArray(trackUriList);
-//
-//            String snapshotId = new GenericHttpRequests.HttpRequestPost(appendPlaylistQuery, getIntent().getStringExtra("Access"),
-//                    null, jsUriArray).execute().get();
-//
-//            if (snapshotId.equals("") || snapshotId.equals(null)) {
-//                Snackbar newPlaylistNotCreated = Snackbar.make(findViewById(R.id.resultList), "Something didn't work...", Snackbar.LENGTH_LONG);
-//                newPlaylistNotCreated.show();
-//            }
-//            else {
-//                Snackbar newPlaylistCreated = Snackbar.make(findViewById(R.id.resultList), "Woah!", Snackbar.LENGTH_LONG);
-//                newPlaylistCreated.show();
-//            }
+            String snapshotId = new GenericHttpRequests.HttpRequestPost(appendPlaylistQuery, getIntent().getStringExtra("Access"),
+                    null, jsUriArray).execute().get();
+
+            if (snapshotId.equals("") || snapshotId.equals(null)) {
+                Snackbar newPlaylistNotCreated = Snackbar.make(findViewById(R.id.resultList), "Something didn't work - please try again!", Snackbar.LENGTH_LONG);
+                newPlaylistNotCreated.show();
+            }
+            else {
+                Snackbar newPlaylistCreated = Snackbar.make(findViewById(R.id.resultList), "Playlist created!", Snackbar.LENGTH_LONG);
+                newPlaylistCreated.show();
+            }
 
 
         } catch (ExecutionException e) {
@@ -188,7 +196,8 @@ public class RecommendResultActivity extends AppCompatActivity {
 
         } catch (InterruptedException e) {
             //TODO: Handle Exception
-
+        } catch (JSONException e) {
+            //TODO: Handle
         }
     }
 
