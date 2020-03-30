@@ -18,23 +18,18 @@ import java.util.concurrent.ExecutionException;
 
 public class MetaDataListAdapter extends ArrayAdapter {
 
-    private static final String RECOMMEND_URL = "https://api.spotify.com/v1/recommendations?";
-
     protected Activity context;
     private int layoutFile;
     private String[] metadata;
     private String trackId;
     private String accessToken;
 
-    protected MetaDataListAdapter(Activity context, String[] metadata, int layoutFile,
-                                  String trackId, String accessToken) {
+    protected MetaDataListAdapter(Activity context, String[] metadata, int layoutFile) {
         super(context, layoutFile, metadata);
 
         this.context = context;
         this.metadata = metadata;
         this.layoutFile = layoutFile;
-        this.trackId = trackId;
-        this.accessToken = accessToken;
     }
 
     public View getView(int count, View view, ViewGroup viewGroup) {
@@ -45,7 +40,6 @@ public class MetaDataListAdapter extends ArrayAdapter {
         attributeField.setText(metadata[count]);
 
         Button infoButton = rowView.findViewById(R.id.showInfo);
-        Button recommendationButton = rowView.findViewById(R.id.getRecommendation);
 
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,46 +56,6 @@ public class MetaDataListAdapter extends ArrayAdapter {
                 info.setText(returnMetaDataInfo(metadata[count].split(":")[0]));
 
                 popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
-            }
-        });
-
-        recommendationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String attributeName = metadata[count].split(":")[0].toLowerCase();
-                String query = "";
-                double attributeValue = 1;
-
-                String attributeValueString = metadata[count].split(":")[1].replaceAll("\"", "");
-
-                if (attributeName.equals("danceability") || attributeName.equals("energy") || attributeName.equals("speechiness") ||
-                        attributeName.equals("valence") || attributeName.equals("acousticness")) {
-                    attributeValue = Double.parseDouble(attributeValueString) / 100;
-                }
-                if (attributeName.equals("loudness") || attributeName.equals("tempo")) {
-                    attributeValueString = attributeValueString.split(" ")[1];
-                    attributeValue = Double.parseDouble(attributeValueString.split(" ")[0]);
-                }
-
-                if (attributeName.equals("loudness")) {
-                    query = RECOMMEND_URL + "limit=100&market=US&seed_tracks=" + trackId + "&min_" +
-                            attributeName + "=" + (attributeValue+(attributeValue*0.1)) + "&max_" +
-                            attributeName + "=" + (attributeValue-(attributeValue*0.1)) + "&target_" +
-                            attributeName + "=" + attributeValue;
-                }
-                else {
-                    query = RECOMMEND_URL + "limit=100&market=US&seed_tracks=" + trackId + "&min_" +
-                            attributeName + "=" + (attributeValue-(attributeValue*0.1)) + "&max_" +
-                            attributeName + "=" + (attributeValue+(attributeValue*0.1)) + "&target_" +
-                            attributeName + "=" + attributeValue;
-                }
-
-                Intent recommendResultIntent = new Intent(context, RecommendResultActivity.class);
-                recommendResultIntent.putExtra("Query", query);
-                recommendResultIntent.putExtra("Access", accessToken);
-                context.startActivity(recommendResultIntent);
-
             }
         });
 

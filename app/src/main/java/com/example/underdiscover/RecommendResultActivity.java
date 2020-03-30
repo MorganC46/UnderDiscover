@@ -99,51 +99,57 @@ public class RecommendResultActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    if (numberOfResults <= 9) {
-                        toDisplay = numberOfResults - 1;
-                    } else {
-                        toDisplay = 10;
-                    }
+                    if (numberOfResults != 0) {
 
-                    searchAdapter = new TrackListAdapter(context, trackNameList.subList(0, toDisplay).toArray(new String[0]), artistNameList.subList(0, toDisplay).toArray(new String[0]),
-                            imageList.subList(0, toDisplay).toArray(new Drawable[0]), trackUriList.subList(0, toDisplay).toArray(new String[0]), R.layout.listview_track);
-                    ListView searchList = findViewById(R.id.resultList);
-
-                    Button loadMore = new Button(context);
-                    loadMore.setText("Load more recommendations...");
-
-                    loadMore.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            if (toDisplay == numberOfResults) {
-                                Snackbar allResultsShown = Snackbar.make(findViewById(R.id.resultList), "No further recommendations to show!", Snackbar.LENGTH_LONG);
-                                allResultsShown.show();
-                            } else {
-
-                                if (numberOfResults < toDisplay + 10) {
-                                    toDisplay = numberOfResults;
-                                } else {
-                                    toDisplay = toDisplay + 10;
-                                }
-
-                                searchAdapter = new TrackListAdapter(context, trackNameList.subList(0, toDisplay).toArray(new String[0]), artistNameList.subList(0, toDisplay).toArray(new String[0]),
-                                        imageList.subList(0, toDisplay).toArray(new Drawable[0]), trackUriList.subList(0, toDisplay).toArray(new String[0]), R.layout.listview_track);
-
-                                searchList.setAdapter(searchAdapter);
-                                if ((toDisplay % 10) != 0) {
-                                    searchList.setSelection(toDisplay - (16 - (10 - (toDisplay % 10))));
-                                } else {
-                                    searchList.setSelection(toDisplay - 16);
-                                }
-                                searchAdapter.notifyDataSetChanged();
-
-                            }
+                        if (numberOfResults <= 9) {
+                            toDisplay = numberOfResults - 1;
+                        } else {
+                            toDisplay = 10;
                         }
-                    });
 
-                    searchList.addFooterView(loadMore);
-                    searchList.setAdapter(searchAdapter);
+                        searchAdapter = new TrackListAdapter(context, trackNameList.subList(0, toDisplay).toArray(new String[0]), artistNameList.subList(0, toDisplay).toArray(new String[0]),
+                                imageList.subList(0, toDisplay).toArray(new Drawable[0]), trackUriList.subList(0, toDisplay).toArray(new String[0]), R.layout.listview_track);
+                        ListView searchList = findViewById(R.id.resultList);
+
+                        Button loadMore = new Button(context);
+                        loadMore.setText("Load more recommendations...");
+
+                        loadMore.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                if (toDisplay == numberOfResults) {
+                                    Snackbar allResultsShown = Snackbar.make(findViewById(R.id.resultList), "No further recommendations to show!", Snackbar.LENGTH_LONG);
+                                    allResultsShown.show();
+                                } else {
+
+                                    if (numberOfResults < toDisplay + 10) {
+                                        toDisplay = numberOfResults;
+                                    } else {
+                                        toDisplay = toDisplay + 10;
+                                    }
+
+                                    searchAdapter = new TrackListAdapter(context, trackNameList.subList(0, toDisplay).toArray(new String[0]), artistNameList.subList(0, toDisplay).toArray(new String[0]),
+                                            imageList.subList(0, toDisplay).toArray(new Drawable[0]), trackUriList.subList(0, toDisplay).toArray(new String[0]), R.layout.listview_track);
+
+                                    searchList.setAdapter(searchAdapter);
+                                    if ((toDisplay % 10) != 0) {
+                                        searchList.setSelection(toDisplay - (16 - (10 - (toDisplay % 10))));
+                                    } else {
+                                        searchList.setSelection(toDisplay - 16);
+                                    }
+                                    searchAdapter.notifyDataSetChanged();
+
+                                }
+                            }
+                        });
+
+                        searchList.addFooterView(loadMore);
+                        searchList.setAdapter(searchAdapter);
+                    }
+                    else {
+                        context.finish();
+                    }
                 }
             });
         } catch (JSONException e) {
