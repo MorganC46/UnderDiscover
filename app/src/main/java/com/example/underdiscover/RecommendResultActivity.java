@@ -102,7 +102,7 @@ public class RecommendResultActivity extends AppCompatActivity {
                     if (numberOfResults != 0) {
 
                         if (numberOfResults <= 9) {
-                            toDisplay = numberOfResults - 1;
+                            toDisplay = numberOfResults;
                         } else {
                             toDisplay = 10;
                         }

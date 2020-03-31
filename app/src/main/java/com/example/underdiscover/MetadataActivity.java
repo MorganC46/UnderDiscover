@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class MetadataActivity extends AppCompatActivity {
     private Activity context;
     private Map<String,Boolean> selectedAttributes;
     private Map<String,Double> attributeValues;
+    private Double tightPercent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,29 @@ public class MetadataActivity extends AppCompatActivity {
         attributeValues.put("acousticness", 0.0);
         attributeValues.put("valence", 0.0);
         attributeValues.put("tempo", 0.0);
+
+        SeekBar tightnessBar = findViewById(R.id.tightnessBar);
+
+        int tightness = tightnessBar.getProgress();
+        TextView tightnessLabel = findViewById(R.id.tightnessTitle);
+        tightnessLabel.setText("Tightness Percentage:" + tightness);
+
+        this.tightPercent = 15.0;
+
+        tightnessBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar tightnessBar, int tightness, boolean fromUser) {
+                tightnessLabel.setText("Tightness Percentage: " + tightness + "%");
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                tightPercent = (double)tightnessBar.getProgress();
+            }
+
+        });
 
         try {
             String result = new GenericHttpRequests.HttpRequestGet(apiUrl, getIntent().getStringExtra("Access")).execute().get();
@@ -92,19 +117,21 @@ public class MetadataActivity extends AppCompatActivity {
 
                         if (attributeName.equals("danceability") || attributeName.equals("energy") || attributeName.equals("speechiness") ||
                                 attributeName.equals("valence") || attributeName.equals("acousticness") || attributeName.equals("tempo")) {
-                            query = query + "&min_" + attributeName + "=" + (attributeValue-(attributeValue*0.1)) + "&max_" +
-                                    attributeName + "=" + (attributeValue+(attributeValue*0.1)) + "&target_" +
+                            query = query + "&min_" + attributeName + "=" + (attributeValue-(attributeValue*(tightPercent/100))) + "&max_" +
+                                    attributeName + "=" + (attributeValue+(attributeValue*(tightPercent/100))) + "&target_" +
                                     attributeName + "=" + attributeValue;
                         }
                         if (attributeName.equals("loudness")) {
-                            query = query + "&min_" + attributeName + "=" + (attributeValue+(attributeValue*0.1)) + "&max_" +
-                                    attributeName + "=" + (attributeValue-(attributeValue*0.1)) + "&target_" +
+                            query = query + "&min_" + attributeName + "=" + (attributeValue+(attributeValue*(tightPercent/100))) + "&max_" +
+                                    attributeName + "=" + (attributeValue-(attributeValue*(tightPercent/100))) + "&target_" +
                                     attributeName + "=" + attributeValue;
                         }
                     }
                 }
             }
         }
+
+        Log.d("TEST", query);
 
         Intent recommendResultIntent = new Intent(context, RecommendResultActivity.class);
         recommendResultIntent.putExtra("Query", query);
