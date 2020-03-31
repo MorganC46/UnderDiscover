@@ -105,14 +105,14 @@ public class MetadataActivity extends AppCompatActivity {
                 + getIntent().getStringExtra("TrackID");
 
         for (Map.Entry<String,Boolean> selectedPair : selectedAttributes.entrySet()) {
-            if (selectedPair.getValue() == true) {
+            if (selectedPair.getValue()) {
 
                 String attributeName = selectedPair.getKey();
 
                 for (HashMap.Entry<String,Double> valuePair : attributeValues.entrySet()) {
                     if (valuePair.getKey().equals(attributeName)) {
 
-                        double attributeValue = 0;
+                        double attributeValue;
                         attributeValue = valuePair.getValue();
 
                         if (attributeName.equals("danceability") || attributeName.equals("energy") || attributeName.equals("speechiness") ||
