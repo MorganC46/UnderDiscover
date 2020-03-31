@@ -2,6 +2,7 @@ package com.example.underdiscover;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,6 +25,11 @@ import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String CLIENT_ID = "5abdc4ff7e8347bebd727e823afa7df7";
@@ -32,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private SpotifyAppRemote mSpotifyAppRemote;
     private int playerState = 0;
     private String ACCESS_TOKEN;
+    private Activity context;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -46,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("UnderDiscover");
+        this.context = this;
     }
 
     @Override
@@ -144,6 +152,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         ACCESS_TOKEN = AuthenticationClient.getResponse(resultCode, intent).getAccessToken();
+
+        try {
+            String accountResult = new GenericHttpRequests.HttpRequestGet("https://api.spotify.com/v1/me", ACCESS_TOKEN).execute().get();
+
+            Log.d("TEST", accountResult);
+
+            JSONObject jsonResp = new JSONObject(accountResult);
+            String accountType = jsonResp.getString("product");
+
+            Log.d("TEST", accountType);
+
+            if (accountType.equals("premium")) {
+                Snackbar notifyType = Snackbar.make(findViewById(R.id.searchSpotify), "This is a premium account!", Snackbar.LENGTH_INDEFINITE);
+                notifyType.show();
+            }
+            else {
+                Snackbar notifyType = Snackbar.make(findViewById(R.id.searchSpotify), "This is a non-premium account!", Snackbar.LENGTH_INDEFINITE);
+                notifyType.show();
+            }
+        }
+        catch (JSONException e) { //TODO:
+        }
+        catch (ExecutionException e) { //TODO:
+        }
+        catch (InterruptedException e){ //TODO:
+        }
     }
 
     public void onClickChangePlayerState(View view) {
