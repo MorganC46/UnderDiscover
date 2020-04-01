@@ -91,7 +91,7 @@ public class RecommendResultActivity extends AppCompatActivity {
                         imageList.add(new GenericHttpRequests.ImageRequest(imageUrl).execute().get());
 
                         HashMap<String, Double> requestTrack = (HashMap<String, Double>) getIntent().getSerializableExtra("ComparisonValues");
-                        String compResult = new GenericHttpRequests.HttpRequestGet("https://api.spotify.com/v1/audio-features/" + trackUri, getIntent().getStringExtra("Access")).execute().get();
+                        String compResult = new GenericHttpRequests.HttpRequestGet("https://api.spotify.com/v1/audio-features/" + trackUri.split(":")[2], getIntent().getStringExtra("Access")).execute().get();
 
                         compResult = compResult.replace("{", "").replace("}", "");
                         String[] resultArray = compResult.split(",");
@@ -111,9 +111,9 @@ public class RecommendResultActivity extends AppCompatActivity {
                         }
 
                     } catch (ExecutionException e) {
-                        //TODO: Handle Exception
+                        e.printStackTrace();
                     } catch (InterruptedException e) {
-                        //TODO: Handle Exception
+                        e.printStackTrace();
                     }
                 }
             }
