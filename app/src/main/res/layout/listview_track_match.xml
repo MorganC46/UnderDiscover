@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/artistNameMatch"
+        android:layout_width="260dp"
+        android:layout_height="32.5dp"
+        android:layout_below="@id/trackNameMatch"
+        android:layout_marginLeft="2dp"
+        android:layout_toRightOf="@id/trackImageMatch"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="TextView"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/trackImageMatch"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:adjustViewBounds="false"
+        app:srcCompat="@android:drawable/screen_background_light" />
+
+    <TextView
+        android:id="@+id/trackNameMatch"
+        android:layout_width="260dp"
+        android:layout_height="42.5dp"
+        android:layout_marginLeft="2dp"
+        android:layout_toRightOf="@id/trackImageMatch"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <Button
+    android:id="@+id/playTrackMatch"
+    android:layout_width="70dp"
+    android:layout_height="40dp"
+    android:layout_toRightOf="@id/trackNameMatch"
+    android:text="Play"
+    android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/getMetaDataMatch"
+        android:layout_width="70dp"
+        android:layout_height="35dp"
+        android:layout_below="@id/playTrackMatch"
+        android:layout_toRightOf="@id/artistNameMatch"
+        android:text="metadata"
+        android:textSize="8sp" />
+
+</RelativeLayout>

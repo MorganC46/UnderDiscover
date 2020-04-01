@@ -104,6 +104,8 @@ public class MetadataActivity extends AppCompatActivity {
         String query = "https://api.spotify.com/v1/recommendations?limit=100&market=US&seed_tracks="
                 + getIntent().getStringExtra("TrackID");
 
+        HashMap passValues = new HashMap<>();
+
         for (Map.Entry<String,Boolean> selectedPair : selectedAttributes.entrySet()) {
             if (selectedPair.getValue()) {
 
@@ -111,6 +113,8 @@ public class MetadataActivity extends AppCompatActivity {
 
                 for (HashMap.Entry<String,Double> valuePair : attributeValues.entrySet()) {
                     if (valuePair.getKey().equals(attributeName)) {
+
+                        passValues.put(valuePair.getKey(), valuePair.getValue());
 
                         double attributeValue;
                         attributeValue = valuePair.getValue();
@@ -131,11 +135,10 @@ public class MetadataActivity extends AppCompatActivity {
             }
         }
 
-        Log.d("TEST", query);
-
         Intent recommendResultIntent = new Intent(context, RecommendResultActivity.class);
         recommendResultIntent.putExtra("Query", query);
         recommendResultIntent.putExtra("Access", getIntent().getStringExtra("Access"));
+        recommendResultIntent.putExtra("ComparisonValues", passValues);
         context.startActivity(recommendResultIntent);
     }
 

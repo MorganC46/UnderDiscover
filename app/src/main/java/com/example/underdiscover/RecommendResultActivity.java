@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,7 +31,7 @@ public class RecommendResultActivity extends AppCompatActivity {
     private Activity context;
     private int numberOfResults;
     private int toDisplay;
-    private TrackListAdapter searchAdapter;
+    private TrackListMatchAdapter searchAdapter;
     private ArrayList<String> trackUriList;
 
     @Override
@@ -85,8 +86,30 @@ public class RecommendResultActivity extends AppCompatActivity {
                     artistNameList.add(artistOutput);
 
                     String imageUrl = trackList.getJSONObject(count).getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url");
+
                     try {
                         imageList.add(new GenericHttpRequests.ImageRequest(imageUrl).execute().get());
+
+                        HashMap<String, Double> requestTrack = (HashMap<String, Double>) getIntent().getSerializableExtra("ComparisonValues");
+                        String compResult = new GenericHttpRequests.HttpRequestGet("https://api.spotify.com/v1/audio-features/" + trackUri, getIntent().getStringExtra("Access")).execute().get();
+
+                        compResult = compResult.replace("{", "").replace("}", "");
+                        String[] resultArray = compResult.split(",");
+
+                        for (HashMap.Entry<String, Double> requestPair : requestTrack.entrySet()) {
+
+                            for (int varCount = 0; count < resultArray.length; count++) {
+                                String[] variable = resultArray[varCount].split(":");
+                                variable[0] = variable[0].replaceAll("\\s", "").replaceAll("\"", "");
+
+                                if (variable[0].equals(requestPair.getKey())) {
+
+                                    Log.d("TEST", variable[1] + " comapred to " + requestPair.getValue().toString());
+
+                                }
+                            }
+                        }
+
                     } catch (ExecutionException e) {
                         //TODO: Handle Exception
                     } catch (InterruptedException e) {
@@ -107,8 +130,8 @@ public class RecommendResultActivity extends AppCompatActivity {
                             toDisplay = 10;
                         }
 
-                        searchAdapter = new TrackListAdapter(context, trackNameList.subList(0, toDisplay).toArray(new String[0]), artistNameList.subList(0, toDisplay).toArray(new String[0]),
-                                imageList.subList(0, toDisplay).toArray(new Drawable[0]), trackUriList.subList(0, toDisplay).toArray(new String[0]), R.layout.listview_track);
+                        searchAdapter = new TrackListMatchAdapter(context, trackNameList.subList(0, toDisplay).toArray(new String[0]), artistNameList.subList(0, toDisplay).toArray(new String[0]),
+                                imageList.subList(0, toDisplay).toArray(new Drawable[0]), trackUriList.subList(0, toDisplay).toArray(new String[0]), R.layout.listview_track_match);
                         ListView searchList = findViewById(R.id.resultList);
 
                         Button loadMore = new Button(context);
@@ -129,8 +152,8 @@ public class RecommendResultActivity extends AppCompatActivity {
                                         toDisplay = toDisplay + 10;
                                     }
 
-                                    searchAdapter = new TrackListAdapter(context, trackNameList.subList(0, toDisplay).toArray(new String[0]), artistNameList.subList(0, toDisplay).toArray(new String[0]),
-                                            imageList.subList(0, toDisplay).toArray(new Drawable[0]), trackUriList.subList(0, toDisplay).toArray(new String[0]), R.layout.listview_track);
+                                    searchAdapter = new TrackListMatchAdapter(context, trackNameList.subList(0, toDisplay).toArray(new String[0]), artistNameList.subList(0, toDisplay).toArray(new String[0]),
+                                            imageList.subList(0, toDisplay).toArray(new Drawable[0]), trackUriList.subList(0, toDisplay).toArray(new String[0]), R.layout.listview_track_match);
 
                                     searchList.setAdapter(searchAdapter);
                                     if ((toDisplay % 10) != 0) {
@@ -146,6 +169,7 @@ public class RecommendResultActivity extends AppCompatActivity {
 
                         searchList.addFooterView(loadMore);
                         searchList.setAdapter(searchAdapter);
+
                     }
                     else {
                         context.finish();
