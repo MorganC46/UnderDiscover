@@ -16,14 +16,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.spotify.protocol.types.Track;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ExecutionException;
 
 public class RecommendResultActivity extends AppCompatActivity {
@@ -68,51 +73,55 @@ public class RecommendResultActivity extends AppCompatActivity {
                 title.setText("We found " + numberOfResults + " tracks we think you will like...");
             }
 
-            ArrayList<String> trackNameList = new ArrayList<String>();
-            ArrayList<String> artistNameList = new ArrayList<String>();
-            ArrayList<Drawable> imageList = new ArrayList<Drawable>();
+            ArrayList<TrackDetails> trackDetailsList = new ArrayList<>(numberOfResults);
 
             for (int count = 0; count < numberOfResults; count++) {
                 if (trackList.getJSONObject(count).getString("type").equals("track")) {
 
-                    String trackOutput = trackList.getJSONObject(count).getString("name");
-
-                    trackNameList.add(trackOutput);
-
+                    String trackName = trackList.getJSONObject(count).getString("name");
                     String trackUri = trackList.getJSONObject(count).getString("uri");
-                    trackUriList.add(trackUri);
-
-                    String artistOutput = trackList.getJSONObject(count).getJSONArray("artists").getJSONObject(0).getString("name");
-                    artistNameList.add(artistOutput);
-
+                    String artistName = trackList.getJSONObject(count).getJSONArray("artists").getJSONObject(0).getString("name");
                     String imageUrl = trackList.getJSONObject(count).getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url");
 
                     try {
-                        imageList.add(new GenericHttpRequests.ImageRequest(imageUrl).execute().get());
 
-                        HashMap<String, Double> requestTrack = (HashMap<String, Double>) getIntent().getSerializableExtra("ComparisonValues");
                         String compResult = new GenericHttpRequests.HttpRequestGet("https://api.spotify.com/v1/audio-features/" + trackUri.split(":")[2], getIntent().getStringExtra("Access")).execute().get();
 
                         compResult = compResult.replace("{", "").replace("}", "");
                         String[] resultArray = compResult.split(",");
 
+                        HashMap<String, Double> individualPercentages = new HashMap<>();
+
+                        HashMap<String, Double> requestTrack = (HashMap<String, Double>) getIntent().getSerializableExtra("ComparisonValues");
                         for (HashMap.Entry<String, Double> requestPair : requestTrack.entrySet()) {
 
-                            for (int varCount = 0; count < resultArray.length; count++) {
+                            for (int varCount = 0; varCount < resultArray.length; varCount++) {
                                 String[] variable = resultArray[varCount].split(":");
                                 variable[0] = variable[0].replaceAll("\\s", "").replaceAll("\"", "");
 
                                 if (variable[0].equals(requestPair.getKey())) {
-
-                                    Log.d("TEST", variable[1] + " comapred to " + requestPair.getValue().toString());
-
+                                    individualPercentages.put(variable[0], returnAttributePercentage(Double.parseDouble(variable[1]), requestPair.getValue()));
                                 }
                             }
                         }
 
-                    } catch (ExecutionException e) {
+                        Double overallDifference = 0.0;
+                        for (HashMap.Entry<String, Double> attributes : individualPercentages.entrySet()) {
+                            overallDifference = overallDifference + attributes.getValue();
+                        }
+                        if (overallDifference != 0.0) {
+                            overallDifference = overallDifference/(double)individualPercentages.size();
+                        }
+                        trackUriList.add(trackUri);
+                        TrackDetails trackDetails = new TrackDetails(trackName, artistName, trackUri, new GenericHttpRequests.ImageRequest(imageUrl).execute().get(), overallDifference, individualPercentages);
+
+                        trackDetailsList.add(trackDetails);
+                    }
+
+                    catch (ExecutionException e) {
                         e.printStackTrace();
-                    } catch (InterruptedException e) {
+                    }
+                    catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
@@ -130,8 +139,11 @@ public class RecommendResultActivity extends AppCompatActivity {
                             toDisplay = 10;
                         }
 
-                        searchAdapter = new TrackListMatchAdapter(context, trackNameList.subList(0, toDisplay).toArray(new String[0]), artistNameList.subList(0, toDisplay).toArray(new String[0]),
-                                imageList.subList(0, toDisplay).toArray(new Drawable[0]), trackUriList.subList(0, toDisplay).toArray(new String[0]), R.layout.listview_track_match);
+                        Collections.sort(trackDetailsList, (TrackDetails track1, TrackDetails track2) ->
+                            track1.getOverallMatch().compareTo(track2.getOverallMatch())
+                        );
+
+                        searchAdapter = new TrackListMatchAdapter(context, new ArrayList(trackDetailsList.subList(0, toDisplay)), R.layout.listview_track_match);
                         ListView searchList = findViewById(R.id.resultList);
 
                         Button loadMore = new Button(context);
@@ -152,8 +164,7 @@ public class RecommendResultActivity extends AppCompatActivity {
                                         toDisplay = toDisplay + 10;
                                     }
 
-                                    searchAdapter = new TrackListMatchAdapter(context, trackNameList.subList(0, toDisplay).toArray(new String[0]), artistNameList.subList(0, toDisplay).toArray(new String[0]),
-                                            imageList.subList(0, toDisplay).toArray(new Drawable[0]), trackUriList.subList(0, toDisplay).toArray(new String[0]), R.layout.listview_track_match);
+                                    searchAdapter = new TrackListMatchAdapter(context, new ArrayList(trackDetailsList.subList(0, toDisplay)), R.layout.listview_track_match);
 
                                     searchList.setAdapter(searchAdapter);
                                     if ((toDisplay % 10) != 0) {
@@ -183,6 +194,19 @@ public class RecommendResultActivity extends AppCompatActivity {
             //TODO: HANDLE EXCEPTION
         }
 
+    }
+
+    private Double returnAttributePercentage(Double value, Double compare) {
+        if (value > compare) {
+            return (100.0 * ((value - compare) / compare));
+        }
+        if (compare > value) {
+            return (100.0 * ((compare - value) / value));
+        }
+        if (compare == value) {
+            return 100.0;
+        }
+        return 0.0;
     }
 
     public void onClickAddToPlaylist(View v) {
