@@ -2,7 +2,6 @@ package com.example.underdiscover;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,23 +10,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class TrackListAdapter extends ArrayAdapter {
 
     protected Activity context;
     private int layoutFile;
-    private String[] trackName;
-    private String[] artistName;
-    private Drawable[] image;
-    private String[] uri;
+    private ArrayList<TrackDetails> trackDetails;
 
-    protected TrackListAdapter(Activity context, String[] trackName, String[] artistName, Drawable[] image, String[] uri, int layoutFile) {
-        super(context, layoutFile, trackName);
+    protected TrackListAdapter(Activity context, ArrayList<TrackDetails> trackDetails, int layoutFile) {
+        super(context, layoutFile, trackDetails);
 
         this.context = context;
-        this.trackName = trackName;
-        this.artistName = artistName;
-        this.image = image;
-        this.uri = uri;
+        this.trackDetails = trackDetails;
         this.layoutFile = layoutFile;
     }
 
@@ -36,14 +31,16 @@ public class TrackListAdapter extends ArrayAdapter {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(layoutFile, null, true);
 
+        TrackDetails currentTrack = trackDetails.get(count);
+
         TextView trackText = rowView.findViewById(R.id.trackName);
-        trackText.setText(trackName[count]);
+        trackText.setText(currentTrack.getTrackName());
 
         TextView artistText = rowView.findViewById(R.id.artistName);
-        artistText.setText(artistName[count]);
+        artistText.setText(currentTrack.getArtistName());
 
         ImageView imageView = rowView.findViewById(R.id.trackImage);
-        imageView.setImageDrawable(image[count]);
+        imageView.setImageDrawable(currentTrack.getImage());
 
         Button playButton = rowView.findViewById(R.id.playTrack);
         Button metaDataButton = rowView.findViewById(R.id.getMetaData);
@@ -60,11 +57,11 @@ public class TrackListAdapter extends ArrayAdapter {
             public void onClick(View v) {
                 Intent metaDataIntent = new Intent(context, MetadataActivity.class);
 
-                String[] trackUri = uri[count].split(":");
+                String[] trackUri = currentTrack.getTrackUri().split(":");
 
                 metaDataIntent.putExtra("TrackID", trackUri[2]);
                 metaDataIntent.putExtra("Access", context.getIntent().getStringExtra("Access"));
-                metaDataIntent.putExtra("TrackName", trackName[count] + " by " + artistName[count]);
+                metaDataIntent.putExtra("TrackName", currentTrack.getTrackName() + " by " + currentTrack.getArtistName());
 
                 context.startActivity(metaDataIntent);
             }

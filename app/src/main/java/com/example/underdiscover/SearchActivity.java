@@ -2,8 +2,8 @@ package com.example.underdiscover;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -77,28 +77,25 @@ public class SearchActivity extends AppCompatActivity {
                 JSONObject list = jsonResp.optJSONObject("tracks");
                 JSONArray trackList = (JSONArray) list.get("items");
 
-                ArrayList<String> trackNameList = new ArrayList<String>();
-                ArrayList<String> artistNameList = new ArrayList<String>();
-                ArrayList<Drawable> imageList = new ArrayList<Drawable>();
-                ArrayList<String> trackUriList = new ArrayList<String>();
+                ArrayList<TrackDetails> trackDetailsList = new ArrayList<>();
 
                 for (int count = 0; count < trackList.length(); count++) {
+
                     if (trackList.getJSONObject(count).getString("type").equals("track")) {
-
-                        String trackOutput = trackList.getJSONObject(count).getString("name");
-
-                        if (trackOutput.toLowerCase().contains(check.toLowerCase()) == true) {
-                            trackNameList.add(trackOutput);
-
-                            String trackUri = trackList.getJSONObject(count).getString("uri");
-                            trackUriList.add(trackUri);
-
-                            String artistOutput = trackList.getJSONObject(count).getJSONArray("artists").getJSONObject(0).getString("name");
-                            artistNameList.add(artistOutput);
-
-                            String imageUrl = trackList.getJSONObject(count).getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url");
+                        if (trackList.getJSONObject(count).getString("name").toLowerCase().contains(check.toLowerCase())) {
                             try {
-                                imageList.add(new GenericHttpRequests.ImageRequest(imageUrl).execute().get());
+                                TrackDetails currentTrack = new TrackDetails(
+                                        trackList.getJSONObject(count).getString("name"),
+                                        trackList.getJSONObject(count).getJSONArray("artists").getJSONObject(0).getString("name"),
+                                        trackList.getJSONObject(count).getString("uri"),
+                                        new GenericHttpRequests.ImageRequest(
+                                                trackList.getJSONObject(count).getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url"))
+                                                .execute().get()
+                                );
+
+                                trackDetailsList.add(currentTrack);
+                                Log.d("TEST", currentTrack.getTrackName());
+
                             } catch (ExecutionException e) {
                                 //TODO: Handle Exception
                             } catch (InterruptedException e) {
@@ -111,8 +108,7 @@ public class SearchActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        TrackListAdapter searchAdapter = new TrackListAdapter(context, trackNameList.toArray(new String[0]), artistNameList.toArray(new String[0]),
-                                imageList.toArray(new Drawable[0]), trackUriList.toArray(new String[0]), R.layout.listview_track);
+                        TrackListAdapter searchAdapter = new TrackListAdapter(context, trackDetailsList, R.layout.listview_track);
                         ListView searchList = findViewById(R.id.searchList);
                         searchList.setAdapter(searchAdapter);
                     }

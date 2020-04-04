@@ -2,8 +2,6 @@ package com.example.underdiscover;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +11,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
-import java.util.concurrent.ExecutionException;
 
 public class MetaDataListAdapter extends ArrayAdapter {
 
