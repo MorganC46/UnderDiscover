@@ -2,6 +2,7 @@ package com.example.underdiscover;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TrackListMatchAdapter extends ArrayAdapter {
 
@@ -72,6 +74,15 @@ public class TrackListMatchAdapter extends ArrayAdapter {
                 metaDataIntent.putExtra("TrackName", currentTrack.getTrackName() + " by " + currentTrack.getArtistName());
 
                 context.startActivity(metaDataIntent);
+            }
+        });
+
+        overallMatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (HashMap.Entry<String, Double> attributes : currentTrack.getIndividualMatches().entrySet()) {
+                    Log.d(attributes.getKey(), attributes.getValue().toString());
+                }
             }
         });
 
