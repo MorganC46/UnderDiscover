@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -20,6 +21,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class RecommendResultActivity extends AppCompatActivity {
@@ -29,6 +31,7 @@ public class RecommendResultActivity extends AppCompatActivity {
     private int toDisplay;
     private TrackListMatchAdapter searchAdapter;
     private ArrayList<String> trackUriList;
+    private Double currentTightness;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +41,9 @@ public class RecommendResultActivity extends AppCompatActivity {
         this.context = this;
         this.numberOfResults = 0;
         this.trackUriList = new ArrayList<>();
+        this.currentTightness = getIntent().getDoubleExtra("Tightness", 15.0);
 
-        try {
-            String result = new GenericHttpRequests.HttpRequestGet(getIntent().getStringExtra("Query"), getIntent().getStringExtra("Access")).execute().get();
-            dealWithRecommendedResult(result);
-        } catch (ExecutionException e) {
-            //TODO: Handle Exception
-        } catch (InterruptedException e) {
-            //TODO: Handle Exception
-        }
+        generateRecommendations(currentTightness);
 
     }
 
@@ -58,11 +55,9 @@ public class RecommendResultActivity extends AppCompatActivity {
             numberOfResults = trackList.length();
 
             TextView title = findViewById(R.id.resultTitle);
-            if (numberOfResults == 100) {
-                title.setText("We found over 100 tracks we think you will like...");
-            } else {
-                title.setText("We found " + numberOfResults + " tracks we think you will like...");
-            }
+
+            if (numberOfResults > 100) { title.setText("We found over 100 tracks we think you will like..."); }
+            else { title.setText("We found " + numberOfResults + " tracks we think you will like..."); }
 
             ArrayList<TrackDetails> trackDetailsList = new ArrayList<>(numberOfResults);
 
@@ -172,9 +167,34 @@ public class RecommendResultActivity extends AppCompatActivity {
                         searchList.addFooterView(loadMore);
                         searchList.setAdapter(searchAdapter);
 
+                        if (numberOfResults > 50) {
+                            Snackbar refineResults = Snackbar.make(findViewById(R.id.resultList), "Large result detected - would you like to refine?", Snackbar.LENGTH_LONG + 10000)
+                                    .setAction("YES", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            currentTightness = currentTightness * 0.8;
+                                            searchList.removeFooterView(loadMore);
+                                            generateRecommendations(currentTightness);
+                                        }
+                                    });
+                            refineResults.show();
+                        }
+                        else if (numberOfResults < 10) {
+                            Snackbar refineResults = Snackbar.make(findViewById(R.id.resultList), "Small result detected - would you like to broaden?", Snackbar.LENGTH_LONG + 10000)
+                                    .setAction("YES", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            currentTightness = currentTightness * 1.2;
+                                            searchList.removeFooterView(loadMore);
+                                            generateRecommendations(currentTightness);
+                                        }
+                                    });
+                            refineResults.show();
+                        }
+
                     }
                     else {
-                        context.finish();
+                        context.finish(); //TODO: Handle no matches
                     }
                 }
             });
@@ -311,6 +331,38 @@ public class RecommendResultActivity extends AppCompatActivity {
         }
 
         return userId;
+    }
+
+    private void generateRecommendations(Double selectedTightness) {
+        String query = getIntent().getStringExtra("Query");
+
+        HashMap<String,Double> passValues = (HashMap<String,Double>)getIntent().getSerializableExtra("ComparisonValues");
+
+        try {
+
+            for (Map.Entry<String,Double> attributes : passValues.entrySet()) {
+
+                if (attributes.getKey().equals("danceability") || attributes.getKey().equals("energy") || attributes.getKey().equals("speechiness") ||
+                        attributes.getKey().equals("valence") || attributes.getKey().equals("acousticness") || attributes.getKey().equals("tempo")) {
+                    query = query + "&min_" + attributes.getKey() + "=" + (attributes.getValue() - (attributes.getValue() * (selectedTightness / 100))) + "&max_" +
+                            attributes.getKey() + "=" + (attributes.getValue() + (attributes.getValue() * (selectedTightness / 100))) + "&target_" +
+                            attributes.getKey() + "=" + attributes.getValue();
+                }
+                if (attributes.getKey().equals("loudness")) {
+                    query = query + "&min_" + attributes.getKey() + "=" + (attributes.getValue() + (attributes.getValue() * (selectedTightness / 100))) + "&max_" +
+                            attributes.getKey() + "=" + (attributes.getValue() - (attributes.getValue() * (selectedTightness / 100))) + "&target_" +
+                            attributes.getKey() + "=" + attributes.getValue();
+                }
+            }
+
+            String result = new GenericHttpRequests.HttpRequestGet(query, getIntent().getStringExtra("Access")).execute().get();
+            dealWithRecommendedResult(result);
+
+        } catch (ExecutionException e) {
+            //TODO: Handle Exception
+        } catch (InterruptedException e) {
+            //TODO: Handle Exception
+        }
     }
 
 }

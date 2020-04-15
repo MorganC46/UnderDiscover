@@ -101,9 +101,6 @@ public class MetadataActivity extends AppCompatActivity {
 
     public void onClickRecommendTracks(View view) {
 
-        String query = "https://api.spotify.com/v1/recommendations?limit=100&market=US&seed_tracks="
-                + getIntent().getStringExtra("TrackID");
-
         HashMap passValues = new HashMap<>();
 
         for (Map.Entry<String,Boolean> selectedPair : selectedAttributes.entrySet()) {
@@ -116,29 +113,16 @@ public class MetadataActivity extends AppCompatActivity {
 
                         passValues.put(valuePair.getKey(), valuePair.getValue());
 
-                        double attributeValue;
-                        attributeValue = valuePair.getValue();
-
-                        if (attributeName.equals("danceability") || attributeName.equals("energy") || attributeName.equals("speechiness") ||
-                                attributeName.equals("valence") || attributeName.equals("acousticness") || attributeName.equals("tempo")) {
-                            query = query + "&min_" + attributeName + "=" + (attributeValue-(attributeValue*(tightPercent/100))) + "&max_" +
-                                    attributeName + "=" + (attributeValue+(attributeValue*(tightPercent/100))) + "&target_" +
-                                    attributeName + "=" + attributeValue;
-                        }
-                        if (attributeName.equals("loudness")) {
-                            query = query + "&min_" + attributeName + "=" + (attributeValue+(attributeValue*(tightPercent/100))) + "&max_" +
-                                    attributeName + "=" + (attributeValue-(attributeValue*(tightPercent/100))) + "&target_" +
-                                    attributeName + "=" + attributeValue;
-                        }
                     }
                 }
             }
         }
 
         Intent recommendResultIntent = new Intent(context, RecommendResultActivity.class);
-        recommendResultIntent.putExtra("Query", query);
         recommendResultIntent.putExtra("Access", getIntent().getStringExtra("Access"));
+        recommendResultIntent.putExtra("Query", "https://api.spotify.com/v1/recommendations?limit=100&market=US&seed_tracks=" + getIntent().getStringExtra("TrackID"));
         recommendResultIntent.putExtra("ComparisonValues", passValues);
+        recommendResultIntent.putExtra("Tightness", tightPercent);
         context.startActivity(recommendResultIntent);
     }
 
