@@ -57,6 +57,7 @@ public class RecommendResultActivity extends AppCompatActivity {
             TextView title = findViewById(R.id.resultTitle);
 
             if (numberOfResults > 100) { title.setText("We found over 100 tracks we think you will like..."); }
+            else if (numberOfResults == 0) { title.setText("We found no tracks we think you will like..."); }
             else { title.setText("We found " + numberOfResults + " tracks we think you will like..."); }
 
             ArrayList<TrackDetails> trackDetailsList = new ArrayList<>(numberOfResults);
@@ -194,7 +195,15 @@ public class RecommendResultActivity extends AppCompatActivity {
 
                     }
                     else {
-                        context.finish(); //TODO: Handle no matches
+                        Snackbar refineResults = Snackbar.make(findViewById(R.id.resultList), "No results detected - would you like to broaden?", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("YES", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        currentTightness = currentTightness * 1.2;
+                                        generateRecommendations(currentTightness);
+                                    }
+                                });
+                        refineResults.show();
                     }
                 }
             });
