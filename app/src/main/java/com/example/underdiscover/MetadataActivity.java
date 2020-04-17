@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -27,6 +25,10 @@ public class MetadataActivity extends AppCompatActivity {
     private Map<String,Boolean> selectedAttributes;
     private Map<String,Double> attributeValues;
     private Double tightPercent;
+    private boolean advancedMode;
+    private SeekBar tightnessBar;
+    private ListView metadataListBasic;
+    private ListView metadataListAdvanced;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,10 @@ public class MetadataActivity extends AppCompatActivity {
 
         this.attributeList = new ArrayList<>();
         this.context = this;
+        this.advancedMode = false;
+        this.tightnessBar = findViewById(R.id.tightnessBar);
+        this.metadataListBasic = findViewById(R.id.attributeListBasic);
+        this.metadataListAdvanced = findViewById(R.id.attributeListAdvanced);
 
         this.selectedAttributes = new HashMap<>();
         selectedAttributes.put("danceability", false);
@@ -59,32 +65,11 @@ public class MetadataActivity extends AppCompatActivity {
         attributeValues.put("valence", 0.0);
         attributeValues.put("tempo", 0.0);
 
-        SeekBar tightnessBar = findViewById(R.id.tightnessBar);
-
-        int tightness = tightnessBar.getProgress();
-        TextView tightnessLabel = findViewById(R.id.tightnessTitle);
-        tightnessLabel.setText("Tightness Percentage:" + tightness);
-
-        this.tightPercent = 15.0;
-
-        tightnessBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar tightnessBar, int tightness, boolean fromUser) {
-                tightnessLabel.setText("Tightness Percentage: " + tightness + "%");
-            }
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) { }
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                tightPercent = (double)tightnessBar.getProgress();
-            }
-
-        });
-
         try {
             String result = new GenericHttpRequests.HttpRequestGet(apiUrl, getIntent().getStringExtra("Access")).execute().get();
             dealWithResult(result);
+            createBasicView();
+            createAdvancedView();
         }
         catch(ExecutionException e) {
             //TODO: Handle Exception
@@ -97,6 +82,32 @@ public class MetadataActivity extends AppCompatActivity {
 
     public void onClickReturnToMain(View view) {
         finish();
+    }
+
+    public void onClickSwitchMode(View view) {
+        if (advancedMode == false) {
+
+            TextView desc = findViewById(R.id.infoBox);
+            desc.setText("Click attributes to select them for inclusion in recommendations!");
+
+            tightnessBar.setVisibility(View.VISIBLE);
+            metadataListBasic.setVisibility(View.GONE);
+            metadataListAdvanced.setVisibility(View.VISIBLE);
+
+            advancedMode = true;
+        }
+
+        if (advancedMode == true) {
+
+            TextView desc = findViewById(R.id.infoBox);
+            desc.setText("Select 'More' or 'Less' to generate songs with a higher or lower value of selected attribute!");
+
+            tightnessBar.setVisibility(View.GONE);
+            metadataListBasic.setVisibility(View.VISIBLE);
+            metadataListAdvanced.setVisibility(View.GONE);
+
+            advancedMode = false;
+        }
     }
 
     public void onClickRecommendTracks(View view) {
@@ -124,6 +135,72 @@ public class MetadataActivity extends AppCompatActivity {
         recommendResultIntent.putExtra("ComparisonValues", passValues);
         recommendResultIntent.putExtra("Tightness", tightPercent);
         context.startActivity(recommendResultIntent);
+    }
+
+    protected void createBasicView() {
+        MetaDataBasicListAdapter metadataAdapter = new MetaDataBasicListAdapter(context, attributeList.toArray(new String[0])
+                , R.layout.listview_metadata_basic);
+        metadataListBasic.setAdapter(metadataAdapter);
+    }
+
+    protected void createAdvancedView() {
+
+        int tightness = tightnessBar.getProgress();
+        TextView tightnessLabel = findViewById(R.id.tightnessTitle);
+        tightnessLabel.setText("Tightness Percentage:" + tightness);
+
+        this.tightPercent = 15.0;
+
+        tightnessBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar tightnessBar, int tightness, boolean fromUser) {
+                tightnessLabel.setText("Tightness Percentage: " + tightness + "%");
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) { }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                tightPercent = (double)tightnessBar.getProgress();
+            }
+
+        });
+
+        tightnessBar.setVisibility(View.GONE);
+
+        MetaDataAdvancedListAdapter metadataAdapter = new MetaDataAdvancedListAdapter(context, attributeList.toArray(new String[0])
+                , R.layout.listview_metadata_advanced);
+
+        metadataListAdvanced.setAdapter(metadataAdapter);
+        metadataListAdvanced.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                for (int i = 0; i < metadataListAdvanced.getChildCount(); i++) {
+                    if(pos == i ){
+                        if (metadataListAdvanced.getChildAt(i).getBackground() instanceof ColorDrawable) {
+                            int code = ((ColorDrawable) metadataListAdvanced.getChildAt(i).getBackground()).getColor();
+                            if (code == Color.GREEN) {
+                                metadataListAdvanced.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+                                String attributeName = ((TextView)view.findViewById(R.id.attributeTextAdvanced)).getText().toString().split(":")[0].toLowerCase();
+                                selectedAttributes.put(attributeName, false);
+                            }
+                            else {
+                                metadataListAdvanced.getChildAt(i).setBackgroundColor(Color.GREEN);
+                                String attributeName = ((TextView)view.findViewById(R.id.attributeTextAdvanced)).getText().toString().split(":")[0].toLowerCase();
+                                selectedAttributes.put(attributeName, true);
+                            }
+                        }
+                        else {
+                            metadataListAdvanced.getChildAt(i).setBackgroundColor(Color.GREEN);
+                            String attributeName = ((TextView)view.findViewById(R.id.attributeTextAdvanced)).getText().toString().split(":")[0].toLowerCase();
+                            selectedAttributes.put(attributeName, true);
+                        }
+                    }
+                }
+            }
+        });
+        metadataListAdvanced.setVisibility(View.GONE);
     }
 
     protected void dealWithResult(String result) {
@@ -156,45 +233,6 @@ public class MetadataActivity extends AppCompatActivity {
                         + ": " + tempo + " BPM");
             }
         }
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                MetaDataListAdapter metadataAdapter = new MetaDataListAdapter(context, attributeList.toArray(new String[0])
-                        , R.layout.listview_metadata);
-
-                ListView metadataList = findViewById(R.id.attributeList);
-                metadataList.setAdapter(metadataAdapter);
-                metadataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                        for (int i = 0; i < metadataList.getChildCount(); i++) {
-                            if(pos == i ){
-                                if (metadataList.getChildAt(i).getBackground() instanceof ColorDrawable) {
-                                    int code = ((ColorDrawable) metadataList.getChildAt(i).getBackground()).getColor();
-                                    if (code == Color.GREEN) {
-                                        metadataList.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
-                                        String attributeName = ((TextView)view.findViewById(R.id.attributeText)).getText().toString().split(":")[0].toLowerCase();
-                                        selectedAttributes.put(attributeName, false);
-                                    }
-                                    else {
-                                        metadataList.getChildAt(i).setBackgroundColor(Color.GREEN);
-                                        String attributeName = ((TextView)view.findViewById(R.id.attributeText)).getText().toString().split(":")[0].toLowerCase();
-                                        selectedAttributes.put(attributeName, true);
-                                    }
-                                }
-                                else {
-                                    metadataList.getChildAt(i).setBackgroundColor(Color.GREEN);
-                                    String attributeName = ((TextView)view.findViewById(R.id.attributeText)).getText().toString().split(":")[0].toLowerCase();
-                                    selectedAttributes.put(attributeName, true);
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        });
     }
 
 }

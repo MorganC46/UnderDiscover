@@ -5,7 +5,7 @@
     android:descendantFocusability="blocksDescendants">
 
     <TextView
-        android:id="@+id/attributeText"
+        android:id="@+id/attributeTextAdvanced"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:gravity="center|center_horizontal|center_vertical"

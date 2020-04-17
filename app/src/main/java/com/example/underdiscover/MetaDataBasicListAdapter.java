@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-public class MetaDataListAdapter extends ArrayAdapter {
+public class MetaDataBasicListAdapter extends ArrayAdapter {
 
     protected Activity context;
     private int layoutFile;
@@ -20,7 +20,7 @@ public class MetaDataListAdapter extends ArrayAdapter {
     private String trackId;
     private String accessToken;
 
-    protected MetaDataListAdapter(Activity context, String[] metadata, int layoutFile) {
+    protected MetaDataBasicListAdapter(Activity context, String[] metadata, int layoutFile) {
         super(context, layoutFile, metadata);
 
         this.context = context;
@@ -32,10 +32,10 @@ public class MetaDataListAdapter extends ArrayAdapter {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(layoutFile, null, true);
 
-        TextView attributeField = rowView.findViewById(R.id.attributeText);
+        TextView attributeField = rowView.findViewById(R.id.attributeTextBasic);
         attributeField.setText(metadata[count]);
 
-        Button infoButton = rowView.findViewById(R.id.showInfo);
+        Button infoButton = rowView.findViewById(R.id.basicInfo);
 
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
