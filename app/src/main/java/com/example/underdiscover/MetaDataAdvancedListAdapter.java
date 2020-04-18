@@ -17,8 +17,6 @@ public class MetaDataAdvancedListAdapter extends ArrayAdapter {
     protected Activity context;
     private int layoutFile;
     private String[] metadata;
-    private String trackId;
-    private String accessToken;
 
     protected MetaDataAdvancedListAdapter(Activity context, String[] metadata, int layoutFile) {
         super(context, layoutFile, metadata);

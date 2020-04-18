@@ -35,14 +35,4 @@
         android:text="more"
         android:textSize="12sp" />
 
-    <Button
-        android:id="@+id/basicInfo"
-        android:layout_width="60dp"
-        android:layout_height="50dp"
-        android:layout_marginRight="5dp"
-        android:layout_toStartOf="@+id/basicMore"
-        android:layout_toLeftOf="@+id/basicMore"
-        android:text="info"
-        android:textSize="12sp" />
-
 </RelativeLayout>

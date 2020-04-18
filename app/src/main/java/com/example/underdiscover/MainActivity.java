@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         if (playerState != 0) {
 
             mSpotifyAppRemote.getPlayerApi().subscribeToPlayerState().setEventCallback(playerState -> {
-                Intent metaDataIntent = new Intent(MainActivity.this, MetadataActivity.class);
+                Intent metaDataIntent = new Intent(MainActivity.this, MetadataBasicActivity.class);
 
                 String[] trackUri = playerState.track.uri.split(":");
 

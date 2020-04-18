@@ -18,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MetadataActivity"></activity>
+        <activity android:name=".MetadataBasicActivity"></activity>
+        <activity android:name=".MetadataAdvancedActivity"></activity>
         <activity android:name=".RecommendResultActivity"></activity>
         <activity android:name=".SearchActivity"
             android:windowSoftInputMode="adjustPan"/>

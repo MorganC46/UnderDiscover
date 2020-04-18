@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MetadataActivity">
+    tools:context=".MetadataBasicActivity">
 
     <TextView
         android:id="@+id/currentTrack"
@@ -36,49 +36,36 @@
         android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
         android:gravity="center"
-        android:text="Click attributes to select them for inclusion in recommendations!"
-        android:textSize="20sp"
+        android:text="Select 'More' or 'Less' to generate songs with a higher or lower value of selected attribute!"
+        android:autoSizeMaxTextSize="24sp"
+        android:autoSizeMinTextSize="16sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/currentTrack" />
 
     <Button
-        android:id="@+id/returnToMain"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:onClick="onClickReturnToMain"
-        android:text="RETURN TO HOME"
+        android:id="@+id/footerButton1"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:onClick="onClickFooterButton1"
+        android:text="ERROR"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/footerButton2"/>
+
+    <Button
+        android:id="@+id/footerButton2"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:onClick="onClickFooterButton2"
+        android:text="ERROR"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.905"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/recommendTracks"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:onClick="onClickRecommendTracks"
-        android:text="RECOMMEND"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.095"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/switchMode"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:onClick="onClickSwitchMode"
-        android:text="ADVANCED"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/returnToMain"
-        app:layout_constraintStart_toEndOf="@+id/recommendTracks" />
+        app:layout_constraintStart_toEndOf="@+id/footerButton1" />
 
     <TextView
         android:id="@+id/tightnessTitle"
@@ -86,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/attributeListAdvanced"
+        app:layout_constraintBottom_toTopOf="@+id/attributeList"
         app:layout_constraintStart_toStartOf="parent" />
 
     <SeekBar
@@ -103,11 +90,11 @@
         android:layout_height="0.1dp"
         android:layout_width="match_parent"
         android:background="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/attributeListAdvanced"
+        app:layout_constraintBottom_toTopOf="@+id/attributeList"
         />
 
     <ListView
-        android:id="@+id/attributeListAdvanced"
+        android:id="@+id/attributeList"
         android:layout_width="400dp"
         android:layout_height="450dp"
         android:layout_marginStart="20dp"
@@ -116,23 +103,9 @@
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/returnToMain"
+        app:layout_constraintBottom_toTopOf="@+id/footerButton1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/currentTrack" />
 
-    <ListView
-        android:id="@+id/attributeListBasic"
-        android:layout_width="400dp"
-        android:layout_height="450dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="240dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/returnToMain"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentTrack" />
 </androidx.constraintlayout.widget.ConstraintLayout>

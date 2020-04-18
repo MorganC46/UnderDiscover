@@ -56,7 +56,7 @@ public class RecommendResultActivity extends AppCompatActivity {
 
             TextView title = findViewById(R.id.resultTitle);
 
-            if (numberOfResults > 100) { title.setText("We found over 100 tracks we think you will like..."); }
+            if (numberOfResults >= 100) { title.setText("We found over 100 tracks we think you will like..."); }
             else if (numberOfResults == 0) { title.setText("We found no tracks we think you will like..."); }
             else { title.setText("We found " + numberOfResults + " tracks we think you will like..."); }
 
@@ -353,9 +353,21 @@ public class RecommendResultActivity extends AppCompatActivity {
 
                 if (attributes.getKey().equals("danceability") || attributes.getKey().equals("energy") || attributes.getKey().equals("speechiness") ||
                         attributes.getKey().equals("valence") || attributes.getKey().equals("acousticness") || attributes.getKey().equals("tempo")) {
-                    query = query + "&min_" + attributes.getKey() + "=" + (attributes.getValue() - (attributes.getValue() * (selectedTightness / 100))) + "&max_" +
-                            attributes.getKey() + "=" + (attributes.getValue() + (attributes.getValue() * (selectedTightness / 100))) + "&target_" +
-                            attributes.getKey() + "=" + attributes.getValue();
+                    switch(getIntent().getStringExtra("AlgorithmType")) {
+                        case("advanced"):
+                            query = query + "&min_" + attributes.getKey() + "=" + (attributes.getValue() - (attributes.getValue() * (selectedTightness / 100))) + "&max_" +
+                                    attributes.getKey() + "=" + (attributes.getValue() + (attributes.getValue() * (selectedTightness / 100))) + "&target_" +
+                                    attributes.getKey() + "=" + attributes.getValue();
+                            break;
+                        case("higher"):
+                            query = query + "&max_" + attributes.getKey() + "=" + (attributes.getValue() + (attributes.getValue() * (selectedTightness / 100)))
+                                    + "&target_" + attributes.getKey() + "=" + attributes.getValue() + "&min_" + attributes.getKey() + "=" + attributes.getValue();
+                            break;
+                        case("lower"):
+                            query = query + "&min_" + attributes.getKey() + "=" + (attributes.getValue() - (attributes.getValue() * (selectedTightness / 100)))
+                                    + "&target_" + attributes.getKey() + "=" + attributes.getValue() + "&max_" + attributes.getKey() + "=" + attributes.getValue();
+                            break;
+                    }
                 }
                 if (attributes.getKey().equals("loudness")) {
                     query = query + "&min_" + attributes.getKey() + "=" + (attributes.getValue() + (attributes.getValue() * (selectedTightness / 100))) + "&max_" +
@@ -363,6 +375,8 @@ public class RecommendResultActivity extends AppCompatActivity {
                             attributes.getKey() + "=" + attributes.getValue();
                 }
             }
+
+            Log.d("TEST", query);
 
             String result = new GenericHttpRequests.HttpRequestGet(query, getIntent().getStringExtra("Access")).execute().get();
             dealWithRecommendedResult(result);

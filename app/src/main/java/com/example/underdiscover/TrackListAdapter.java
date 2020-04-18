@@ -55,7 +55,7 @@ public class TrackListAdapter extends ArrayAdapter {
         metaDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent metaDataIntent = new Intent(context, MetadataActivity.class);
+                Intent metaDataIntent = new Intent(context, MetadataBasicActivity.class);
 
                 String[] trackUri = currentTrack.getTrackUri().split(":");
 
