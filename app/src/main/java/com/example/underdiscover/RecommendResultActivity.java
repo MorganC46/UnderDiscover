@@ -376,8 +376,6 @@ public class RecommendResultActivity extends AppCompatActivity {
                 }
             }
 
-            Log.d("TEST", query);
-
             String result = new GenericHttpRequests.HttpRequestGet(query, getIntent().getStringExtra("Access")).execute().get();
             dealWithRecommendedResult(result);
 

@@ -73,7 +73,6 @@ public class MetaDataBasicListAdapter extends ArrayAdapter {
 
                 HashMap passValues = new HashMap<>();
                 String attributeName = metadata[count].split(":")[0].toLowerCase();
-                Log.d("TEST", attributeName);
 
                 for (HashMap.Entry<String,Double> valuePair : attributeValues.entrySet()) {
                     if (valuePair.getKey().equals(attributeName)) {

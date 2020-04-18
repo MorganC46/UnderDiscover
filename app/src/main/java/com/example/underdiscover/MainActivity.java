@@ -156,12 +156,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             String accountResult = new GenericHttpRequests.HttpRequestGet("https://api.spotify.com/v1/me", ACCESS_TOKEN).execute().get();
 
-            Log.d("TEST", accountResult);
-
             JSONObject jsonResp = new JSONObject(accountResult);
             String accountType = jsonResp.getString("product");
-
-            Log.d("TEST", accountType);
 
             if (accountType.equals("premium")) {
                 Snackbar notifyType = Snackbar.make(findViewById(R.id.searchSpotify), "This is a premium account!", Snackbar.LENGTH_INDEFINITE);
