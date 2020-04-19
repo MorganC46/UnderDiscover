@@ -141,26 +141,6 @@ public class GenericHttpRequests {
         }
     }
 
-//    //PIECE OF CODE WRITTEN BY FAHIM, STACK OVERFLOW
-//    //https://stackoverflow.com/questions/9767952/how-to-add-parameters-to-httpurlconnection-using-post-using-namevaluepair/29561084#29561084
-//
-//    private static String getDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-//        StringBuilder result = new StringBuilder();
-//        boolean first = true;
-//        for(Map.Entry<String, String> entry : params.entrySet()){
-//            if (first)
-//                first = false;
-//            else
-//                result.append("&");
-//
-//            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-//            result.append("=");
-//            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-//        }
-//
-//        return result.toString();
-//    }
-
     public static class ImageRequest extends AsyncTask<Void, Void, Drawable> {
 
         String imageUrl;

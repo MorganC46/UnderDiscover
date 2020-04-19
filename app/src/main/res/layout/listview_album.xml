@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/trackImageAlbum"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:adjustViewBounds="false"
+        app:srcCompat="@android:drawable/screen_background_light" />
+
+    <TextView
+        android:id="@+id/artistNameAlbum"
+        android:layout_width="240dp"
+        android:layout_height="32.5dp"
+        android:layout_marginLeft="2dp"
+        android:layout_toRightOf="@id/trackImageAlbum"
+        android:layout_below="@+id/albumName"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/albumName"
+        android:layout_width="240dp"
+        android:layout_height="42.5dp"
+        android:layout_marginLeft="2dp"
+        android:layout_toRightOf="@id/trackImageAlbum"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="TextView"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/getAlbumTracks"
+        android:layout_width="90dp"
+        android:layout_height="75dp"
+        android:layout_toRightOf="@id/artistNameAlbum"
+        android:text="Get Tracks"
+        android:textSize="16sp" />
+
+</RelativeLayout>

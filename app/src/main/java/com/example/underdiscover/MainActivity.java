@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
             pause(view); playerState = 2;
         }
 
-        Intent searchIntent = new Intent(MainActivity.this, SearchActivity.class);
+        Intent searchIntent = new Intent(context, SearchActivity.class);
         searchIntent.putExtra("Access", ACCESS_TOKEN);
 
         MainActivity.this.startActivity(searchIntent);

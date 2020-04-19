@@ -61,7 +61,7 @@ public class MetadataAdvancedActivity extends AppCompatActivity {
 
         int tightness = tightnessBar.getProgress();
         TextView tightnessLabel = findViewById(R.id.tightnessTitle);
-        tightnessLabel.setText("Tightness Percentage:" + tightness);
+        tightnessLabel.setText("Tightness Percentage:" + tightness + "%");
 
         this.tightPercent = 15.0;
 
