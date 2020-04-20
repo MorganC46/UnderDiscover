@@ -58,14 +58,10 @@ public class GenericHttpRequests {
                     result = streamIntoString(urlConn.getInputStream());
                     return result;
                 }
-            }
-
-            catch(MalformedURLException eURL) {
+            } catch (MalformedURLException eURL) {
                 eURL.printStackTrace();
                 System.exit(1);
-            }
-
-            catch(IOException eIO) {
+            } catch (IOException eIO) {
                 eIO.printStackTrace();
                 System.exit(2);
             }
@@ -171,15 +167,15 @@ public class GenericHttpRequests {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String data;
-            String result = "";
+            StringBuilder result = new StringBuilder();
 
             while ((data = reader.readLine()) != null) {
-                result += data;
+                result.append(data);
             }
             if (null != stream) {
                 stream.close();
             }
-            return result;
+            return result.toString();
         }
         catch (IOException eIO) {
             eIO.printStackTrace();

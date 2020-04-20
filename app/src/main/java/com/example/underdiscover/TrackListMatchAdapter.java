@@ -2,7 +2,6 @@ package com.example.underdiscover;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +80,7 @@ public class TrackListMatchAdapter extends ArrayAdapter {
             @Override
             public void onClick(View v) {
                 for (HashMap.Entry<String, Double> attributes : currentTrack.getIndividualMatches().entrySet()) {
-                    Log.d(attributes.getKey(), attributes.getValue().toString());
+                    //TODO: Create explanation activity
                 }
             }
         });
