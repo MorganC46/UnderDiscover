@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -152,17 +153,28 @@ public class SearchActivity extends AppCompatActivity {
             for (int count = 0; count < trackList.length(); count++) {
 
                 if (trackList.getJSONObject(count).getString("type").equals("track")) {
-                    TrackDetails currentTrack = new TrackDetails(
-                            trackList.getJSONObject(count).getString("name"),
-                            trackList.getJSONObject(count).getJSONArray("artists").getJSONObject(0).getString("name"),
-                            trackList.getJSONObject(count).getString("uri"),
-                            albumImage,
-                            Integer.parseInt(trackList.getJSONObject(count).getString("popularity")),
-                            "track"
-                    );
+                    try {
 
-                    trackDetailsList.add(currentTrack);
+                        final String popularityResult = new GenericHttpRequests.HttpRequestGet("https://api.spotify.com/v1/tracks/" +
+                                trackList.getJSONObject(count).getString("uri").split(":")[2], getIntent().getStringExtra("Access")).execute().get();
+                        Log.d("TEST", popularityResult);
+                        final JSONObject popularityResponse = new JSONObject(popularityResult);
+                        int popularity = Integer.parseInt(popularityResponse.getString("popularity"));
 
+                        TrackDetails currentTrack = new TrackDetails(
+                                trackList.getJSONObject(count).getString("name"),
+                                trackList.getJSONObject(count).getJSONArray("artists").getJSONObject(0).getString("name"),
+                                trackList.getJSONObject(count).getString("uri"),
+                                albumImage,
+                                popularity,
+                                "track"
+                        );
+                        trackDetailsList.add(currentTrack);
+                    } catch (ExecutionException e) {
+                        //TODO: Handle Exception
+                    } catch (InterruptedException e) {
+                        //TODO: Handle Exception
+                    }
                 }
             }
 
