@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -92,16 +93,27 @@ public class RecommendResultActivity extends AppCompatActivity {
                         }
 
                         Double overallDifference = 0.0;
-                        for (HashMap.Entry<String, Double> attributes : individualPercentages.entrySet()) {
-                            overallDifference = overallDifference + attributes.getValue();
+
+                        if (individualPercentages.size() == 0) {
+                            final int popularity = Integer.parseInt(trackList.getJSONObject(count).getString("popularity"));
+                            overallDifference = (overallDifference + popularity)*0.5;
+                            TrackDetails trackDetails = new TrackDetails(trackName, artistName, trackUri, new GenericHttpRequests.ImageRequest(imageUrl).execute().get(), popularity, overallDifference, individualPercentages);
+                            trackDetailsList.add(trackDetails);
                         }
-                        if (overallDifference != 0.0) {
-                            overallDifference = overallDifference/(double)individualPercentages.size();
+
+                        else {
+                            for (HashMap.Entry<String, Double> attributes : individualPercentages.entrySet()) {
+                                overallDifference = overallDifference + attributes.getValue();
+                            }
+                            int popularityWeighted = Integer.parseInt(trackList.getJSONObject(count).getString("popularity"))/individualPercentages.size();
+                            if (overallDifference != 0.0) {
+                                overallDifference = overallDifference / (double) individualPercentages.size();
+                            }
+                            overallDifference = overallDifference + popularityWeighted;
+                            TrackDetails trackDetails = new TrackDetails(trackName, artistName, trackUri, new GenericHttpRequests.ImageRequest(imageUrl).execute().get(), -1, overallDifference, individualPercentages);
+                            trackDetailsList.add(trackDetails);
                         }
                         trackUriList.add(trackUri);
-                        TrackDetails trackDetails = new TrackDetails(trackName, artistName, trackUri, new GenericHttpRequests.ImageRequest(imageUrl).execute().get(), overallDifference, individualPercentages);
-
-                       trackDetailsList.add(trackDetails);
                     }
 
                     catch (ExecutionException e) {

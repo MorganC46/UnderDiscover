@@ -108,6 +108,7 @@ public class SearchActivity extends AppCompatActivity {
                                     new GenericHttpRequests.ImageRequest(
                                             trackList.getJSONObject(count).getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url"))
                                             .execute().get(),
+                                    Integer.parseInt(trackList.getJSONObject(count).getString("popularity")),
                                     "track"
                             );
 
@@ -155,7 +156,9 @@ public class SearchActivity extends AppCompatActivity {
                             trackList.getJSONObject(count).getString("name"),
                             trackList.getJSONObject(count).getJSONArray("artists").getJSONObject(0).getString("name"),
                             trackList.getJSONObject(count).getString("uri"),
-                            albumImage, "track"
+                            albumImage,
+                            Integer.parseInt(trackList.getJSONObject(count).getString("popularity")),
+                            "track"
                     );
 
                     trackDetailsList.add(currentTrack);
