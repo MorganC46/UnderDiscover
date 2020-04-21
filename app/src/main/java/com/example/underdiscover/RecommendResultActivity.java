@@ -49,11 +49,11 @@ public class RecommendResultActivity extends AppCompatActivity {
     protected void dealWithRecommendedResult(String result) {
 
         try {
-            JSONObject jsonResp = new JSONObject(result);
-            JSONArray trackList = (JSONArray) jsonResp.get("tracks");
+            final JSONObject jsonResp = new JSONObject(result);
+            final JSONArray trackList = (JSONArray) jsonResp.get("tracks");
             numberOfResults = trackList.length();
 
-            TextView title = findViewById(R.id.resultTitle);
+            final TextView title = findViewById(R.id.resultTitle);
 
             if (numberOfResults >= 100) { title.setText("We found over 100 tracks we think you will like..."); }
             else if (numberOfResults == 0) { title.setText("We found no tracks we think you will like..."); }
@@ -64,17 +64,17 @@ public class RecommendResultActivity extends AppCompatActivity {
             for (int count = 0; count < numberOfResults; count++) {
                 if (trackList.getJSONObject(count).getString("type").equals("track")) {
 
-                    String trackName = trackList.getJSONObject(count).getString("name");
-                    String trackUri = trackList.getJSONObject(count).getString("uri");
-                    String artistName = trackList.getJSONObject(count).getJSONArray("artists").getJSONObject(0).getString("name");
-                    String imageUrl = trackList.getJSONObject(count).getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url");
+                    final String trackName = trackList.getJSONObject(count).getString("name");
+                    final String trackUri = trackList.getJSONObject(count).getString("uri");
+                    final String artistName = trackList.getJSONObject(count).getJSONArray("artists").getJSONObject(0).getString("name");
+                    final String imageUrl = trackList.getJSONObject(count).getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url");
 
                     try {
 
                         String compResult = new GenericHttpRequests.HttpRequestGet("https://api.spotify.com/v1/audio-features/" + trackUri.split(":")[2], getIntent().getStringExtra("Access")).execute().get();
 
                         compResult = compResult.replace("{", "").replace("}", "");
-                        String[] resultArray = compResult.split(",");
+                        final String[] resultArray = compResult.split(",");
 
                         HashMap<String, Double> individualPercentages = new HashMap<>();
 
@@ -101,7 +101,7 @@ public class RecommendResultActivity extends AppCompatActivity {
                         trackUriList.add(trackUri);
                         TrackDetails trackDetails = new TrackDetails(trackName, artistName, trackUri, new GenericHttpRequests.ImageRequest(imageUrl).execute().get(), overallDifference, individualPercentages);
 
-                        trackDetailsList.add(trackDetails);
+                       trackDetailsList.add(trackDetails);
                     }
 
                     catch (ExecutionException e) {
@@ -375,7 +375,7 @@ public class RecommendResultActivity extends AppCompatActivity {
                 }
             }
 
-            String result = new GenericHttpRequests.HttpRequestGet(query, getIntent().getStringExtra("Access")).execute().get();
+            final String result = new GenericHttpRequests.HttpRequestGet(query, getIntent().getStringExtra("Access")).execute().get();
             dealWithRecommendedResult(result);
 
         } catch (ExecutionException e) {

@@ -139,7 +139,7 @@ public class GenericHttpRequests {
 
     public static class ImageRequest extends AsyncTask<Void, Void, Drawable> {
 
-        String imageUrl;
+        final String imageUrl;
 
         protected ImageRequest(String imageUrl) {
             this.imageUrl = imageUrl;
@@ -147,8 +147,8 @@ public class GenericHttpRequests {
 
         protected Drawable doInBackground(Void... params) {
             try {
-                InputStream imageInput = (InputStream) new URL(imageUrl).getContent();
-                Drawable imageDrawable = Drawable.createFromStream(imageInput, "artwork");
+                final InputStream imageInput = (InputStream) new URL(imageUrl).getContent();
+                final Drawable imageDrawable = Drawable.createFromStream(imageInput, "artwork");
                 return imageDrawable;
             } catch (MalformedURLException eURL) {
                 eURL.printStackTrace();
