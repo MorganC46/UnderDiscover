@@ -14,8 +14,10 @@ public class TrackDetails {
     Double overallMatch;
     HashMap<String, Double> individualMatches;
     String type;
+    String previewUrl;
 
-    public TrackDetails(String trackName, String artistName, String trackUri, Drawable image, int popularity, Double overallMatch, HashMap<String, Double> individualMatches) {
+    public TrackDetails(String trackName, String artistName, String trackUri, Drawable image, int popularity,
+                        Double overallMatch, HashMap<String, Double> individualMatches, String previewUrl) {
         this.trackName = trackName;
         this.artistName = artistName;
         this.trackUri = trackUri;
@@ -24,9 +26,10 @@ public class TrackDetails {
         this.overallMatch = overallMatch;
         this.individualMatches = individualMatches;
         this.type = null;
+        this.previewUrl = previewUrl;
     }
 
-    public TrackDetails(String trackName, String artistName, String trackUri, Drawable image, int popularity, String type) {
+    public TrackDetails(String trackName, String artistName, String trackUri, Drawable image, int popularity, String type, String previewUrl) {
         this.trackName = trackName;
         this.artistName = artistName;
         this.trackUri = trackUri;
@@ -35,6 +38,7 @@ public class TrackDetails {
         this.overallMatch = null;
         this.individualMatches = null;
         this.type = type;
+        this.previewUrl = previewUrl;
     }
 
     public TrackDetails(String trackName, String artistName, String trackUri, Drawable image, String type) {
@@ -46,6 +50,7 @@ public class TrackDetails {
         this.overallMatch = null;
         this.individualMatches = null;
         this.type = type;
+        this.previewUrl = null;
     }
 
     public void setTrackName(String trackName) { this.trackName = trackName; }
@@ -56,6 +61,7 @@ public class TrackDetails {
     public void setOverallMatch(Double overallMatch) { this.overallMatch = overallMatch; }
     public void setIndividualMatches(HashMap<String, Double> individualMatches) { this.individualMatches = individualMatches; }
     public void setType(String type) { this.type = type; }
+    public void setPreviewUrl(String previewUrl) { this.previewUrl = previewUrl; }
 
     public String getTrackName() { return trackName; }
     public String getArtistName() { return artistName; }
@@ -65,4 +71,6 @@ public class TrackDetails {
     public Double getOverallMatch() { return overallMatch; }
     public HashMap<String, Double> getIndividualMatches() { return individualMatches; }
     public String getType() { return type; }
+    public String getPreviewUrl() { return previewUrl; }
+
 }

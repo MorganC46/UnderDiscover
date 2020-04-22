@@ -57,7 +57,21 @@ public class TrackListMatchAdapter extends ArrayAdapter {
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (currentTrack.getPreviewUrl() == null) {
+                    //SNACKBAR
+                }
+                else {
+                    if (AudioPreviewManager.isMediaPlayerActive()) {
+                        AudioPreviewManager.killMediaPlayer();
+                    }
+                    else {
+                        try {
+                            AudioPreviewManager.playPreview(context, currentTrack.getPreviewUrl());
+                        } catch (Exception e) {
 
+                        }
+                    }
+                }
             }
         });
 
@@ -65,6 +79,8 @@ public class TrackListMatchAdapter extends ArrayAdapter {
             @Override
             public void onClick(View v) {
                 Intent metaDataIntent = new Intent(context, MetadataBasicActivity.class);
+
+                AudioPreviewManager.killMediaPlayer();
 
                 String[] trackUri = currentTrack.getTrackUri().split(":");
 
@@ -79,6 +95,7 @@ public class TrackListMatchAdapter extends ArrayAdapter {
         overallMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AudioPreviewManager.killMediaPlayer();
                 for (HashMap.Entry<String, Double> attributes : currentTrack.getIndividualMatches().entrySet()) {
                     //TODO: Create explanation activity
                 }

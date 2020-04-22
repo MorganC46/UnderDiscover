@@ -50,7 +50,21 @@ public class TrackListAdapter extends ArrayAdapter {
             playButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (currentTrack.getPreviewUrl() == null) {
+                        //SNACKBAR
+                    }
+                    else {
+                        if (AudioPreviewManager.isMediaPlayerActive()) {
+                            AudioPreviewManager.killMediaPlayer();
+                        }
+                        else {
+                            try {
+                                AudioPreviewManager.playPreview(context, currentTrack.getPreviewUrl());
+                            } catch (Exception e) {
 
+                            }
+                        }
+                    }
                 }
             });
 
@@ -58,6 +72,8 @@ public class TrackListAdapter extends ArrayAdapter {
                 @Override
                 public void onClick(View v) {
                     Intent metaDataIntent = new Intent(context, MetadataBasicActivity.class);
+
+                    AudioPreviewManager.killMediaPlayer();
 
                     String[] trackUri = currentTrack.getTrackUri().split(":");
 

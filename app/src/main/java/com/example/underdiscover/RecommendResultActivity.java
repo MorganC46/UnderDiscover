@@ -69,6 +69,7 @@ public class RecommendResultActivity extends AppCompatActivity {
                     final String trackUri = trackList.getJSONObject(count).getString("uri");
                     final String artistName = trackList.getJSONObject(count).getJSONArray("artists").getJSONObject(0).getString("name");
                     final String imageUrl = trackList.getJSONObject(count).getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url");
+                    final String previewUrl = trackList.getJSONObject(count).getString("preview_url");
 
                     try {
 
@@ -97,7 +98,8 @@ public class RecommendResultActivity extends AppCompatActivity {
                         if (individualPercentages.size() == 0) {
                             final int popularity = Integer.parseInt(trackList.getJSONObject(count).getString("popularity"));
                             overallDifference = (overallDifference + popularity)*0.5;
-                            TrackDetails trackDetails = new TrackDetails(trackName, artistName, trackUri, new GenericHttpRequests.ImageRequest(imageUrl).execute().get(), popularity, overallDifference, individualPercentages);
+                            TrackDetails trackDetails = new TrackDetails(trackName, artistName, trackUri, new GenericHttpRequests.ImageRequest(imageUrl).execute().get(),
+                                    popularity, overallDifference, individualPercentages, previewUrl);
                             trackDetailsList.add(trackDetails);
                         }
 
@@ -110,7 +112,8 @@ public class RecommendResultActivity extends AppCompatActivity {
                                 overallDifference = overallDifference / (double) individualPercentages.size();
                             }
                             overallDifference = overallDifference + popularityWeighted;
-                            TrackDetails trackDetails = new TrackDetails(trackName, artistName, trackUri, new GenericHttpRequests.ImageRequest(imageUrl).execute().get(), -1, overallDifference, individualPercentages);
+                            TrackDetails trackDetails = new TrackDetails(trackName, artistName, trackUri, new GenericHttpRequests.ImageRequest(imageUrl).execute().get(),
+                                    -1, overallDifference, individualPercentages, previewUrl);
                             trackDetailsList.add(trackDetails);
                         }
                         trackUriList.add(trackUri);

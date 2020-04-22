@@ -37,7 +37,6 @@ public class SearchActivity extends AppCompatActivity {
 
         this.context = this;
         this.mainList = null;
-
     }
 
     public void onClickReturnToMain(View view) {
@@ -110,7 +109,8 @@ public class SearchActivity extends AppCompatActivity {
                                             trackList.getJSONObject(count).getJSONObject("album").getJSONArray("images").getJSONObject(1).getString("url"))
                                             .execute().get(),
                                     Integer.parseInt(trackList.getJSONObject(count).getString("popularity")),
-                                    "track"
+                                    "track",
+                                    trackList.getJSONObject(count).getString("preview_url")
                             );
 
                             trackDetailsList.add(currentTrack);
@@ -167,7 +167,8 @@ public class SearchActivity extends AppCompatActivity {
                                 trackList.getJSONObject(count).getString("uri"),
                                 albumImage,
                                 popularity,
-                                "track"
+                                "track",
+                                trackList.getJSONObject(count).getString("preview_url")
                         );
                         trackDetailsList.add(currentTrack);
                     } catch (ExecutionException e) {
