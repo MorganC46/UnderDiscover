@@ -1,6 +1,7 @@
 package com.example.underdiscover;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
@@ -17,7 +18,9 @@ public class AudioPreviewManager {
         }
 
         if (mediaPlayer == null) {
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer = MediaPlayer.create(context, Uri.parse(url));
+            mediaPlayer.prepare();
         }
 
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
