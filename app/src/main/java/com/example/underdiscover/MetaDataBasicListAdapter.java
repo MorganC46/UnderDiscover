@@ -62,6 +62,7 @@ public class MetaDataBasicListAdapter extends ArrayAdapter {
                 recommendResultIntent.putExtra("Tightness", 15.0);
                 recommendResultIntent.putExtra("AlgorithmType", "higher");
                 context.startActivity(recommendResultIntent);
+                context.finish();
             }
         });
 
@@ -88,6 +89,7 @@ public class MetaDataBasicListAdapter extends ArrayAdapter {
                 recommendResultIntent.putExtra("Tightness", 15.0);
                 recommendResultIntent.putExtra("AlgorithmType", "lower");
                 context.startActivity(recommendResultIntent);
+                context.finish();
             }
         });
 

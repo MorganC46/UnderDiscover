@@ -82,6 +82,7 @@ public class TrackListAdapter extends ArrayAdapter {
                     metaDataIntent.putExtra("TrackName", currentTrack.getTrackName() + " by " + currentTrack.getArtistName());
 
                     context.startActivity(metaDataIntent);
+                    context.finish();
                 }
             });
         }
