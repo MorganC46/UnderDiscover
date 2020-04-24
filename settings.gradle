@@ -1,4 +1,4 @@
-include ':app', ':spotify-app-remote', ':spotify-api', ':sample-search'
+include ':app', ':spotify-api', ':sample-search'
 rootProject.name='UnderDiscover'
 project(':spotify-api').projectDir = new File('spotify-web-api-android-master/spotify-api')
 project(':sample-search').projectDir = new File('spotify-web-api-android-master/sample-search')

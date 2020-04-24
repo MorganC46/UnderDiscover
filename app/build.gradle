@@ -17,7 +17,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -25,7 +26,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':spotify-app-remote')
     implementation "com.google.code.gson:gson:2.8.5"
     implementation 'com.spotify.android:auth:1.1.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
