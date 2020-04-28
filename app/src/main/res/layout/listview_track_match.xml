@@ -1,89 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/artistNameMatch"
-        android:layout_width="190dp"
-        android:layout_height="32.5dp"
-        android:layout_below="@id/trackNameMatch"
-        android:layout_marginLeft="0dp"
-        android:layout_toRightOf="@id/trackImageMatch"
-        android:autoSizeMaxTextSize="12sp"
-        android:autoSizeMinTextSize="8sp"
-        android:autoSizeStepGranularity="1sp"
-        android:autoSizeTextType="uniform"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="TextView" />
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="75dp">
 
     <ImageView
         android:id="@+id/trackImageMatch"
         android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_height="match_parent"
         android:adjustViewBounds="false"
         app:srcCompat="@android:drawable/screen_background_light" />
 
-    <TextView
-        android:id="@+id/trackNameMatch"
-        android:layout_width="190dp"
-        android:layout_height="42.5dp"
-        android:layout_marginLeft="0dp"
-        android:layout_toRightOf="@id/trackImageMatch"
-        android:autoSizeMaxTextSize="16sp"
-        android:autoSizeMinTextSize="10sp"
-        android:autoSizeStepGranularity="1sp"
-        android:autoSizeTextType="uniform"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="TextView" />
+    <RelativeLayout
+        android:id="@+id/textDetailsTrackListMatch"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="8">
 
-    <Button
-        android:id="@+id/playTrackMatch"
-        android:layout_width="90dp"
-        android:layout_height="38dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="1dp"
-        android:layout_marginRight="1dp"
-        android:text="Preview"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/artistNameMatch"
+            android:layout_width="match_parent"
+            android:layout_height="32.5dp"
+            android:layout_below="@id/trackNameMatch"
+            android:autoSizeMaxTextSize="12sp"
+            android:autoSizeMinTextSize="8sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="TextView" />
 
-    <Button
-        android:id="@+id/getMetaDataMatch"
-        android:layout_width="90dp"
-        android:layout_height="37.5dp"
-        android:layout_below="@id/playTrackMatch"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="1dp"
-        android:layout_marginRight="1dp"
-        android:text="recommend"
-        android:textSize="9sp" />
+        <TextView
+            android:id="@+id/trackNameMatch"
+            android:layout_width="match_parent"
+            android:layout_height="42.5dp"
+            android:autoSizeMaxTextSize="16sp"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="TextView" />
 
-    <ProgressBar
-        android:id="@+id/overallMatchBar"
-        style="?android:progressBarStyleHorizontal"
-        android:layout_width="50dp"
-        android:layout_height="75dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:layout_toLeftOf="@id/playTrackMatch"
-        android:layout_toRightOf="@id/trackNameMatch"
-        android:gravity="center"
-        android:max="100"
-        android:progressDrawable="@drawable/progress_circle" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/overallMatchText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/overallMatchBar"
-        android:layout_alignLeft="@+id/overallMatchBar"
-        android:gravity="center"
-        android:textSize="12sp"
-        android:layout_alignBottom="@+id/overallMatchBar"
-        android:layout_alignTop="@+id/overallMatchBar"
-        />
+    <RelativeLayout
+        android:id="@+id/progressBarTrackListMatch"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2">
 
-</RelativeLayout>
+        <ProgressBar
+            android:id="@+id/overallMatchBar"
+            style="?android:progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:gravity="center"
+            android:max="100"
+            android:progressDrawable="@drawable/progress_circle" />
+
+        <TextView
+            android:id="@+id/overallMatchText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/overallMatchBar"
+            android:layout_alignLeft="@+id/overallMatchBar"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:layout_alignBottom="@+id/overallMatchBar"
+            android:layout_alignTop="@+id/overallMatchBar" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/buttonsTrackListMatch"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3">
+
+        <Button
+            android:id="@+id/playTrackMatch"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_alignParentEnd="true"
+            android:text="Preview"
+            android:autoSizeMaxTextSize="14sp"
+            android:autoSizeMinTextSize="8sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
+            android:maxLines="1"/>
+
+        <Button
+            android:id="@+id/getMetaDataMatch"
+            android:layout_width="match_parent"
+            android:layout_height="37.5dp"
+            android:layout_below="@id/playTrackMatch"
+            android:layout_alignParentEnd="true"
+            android:text="recommend"
+            android:autoSizeMaxTextSize="14sp"
+            android:autoSizeMinTextSize="6sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
+            android:maxLines="1"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

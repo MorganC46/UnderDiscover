@@ -9,7 +9,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
-        android:onClick="onClickReturnToMain"
+        android:onClick="onClickReturnToHome"
         android:text="RETURN TO HOME"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,9 @@
 
     <ListView
         android:id="@+id/resultList"
-        android:layout_width="407dp"
+        android:layout_width="match_parent"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
         android:layout_height="500dp"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="40dp"

@@ -147,7 +147,6 @@ public class MetadataAdvancedActivity extends AppCompatActivity {
         recommendResultIntent.putExtra("Tightness", tightPercent);
         recommendResultIntent.putExtra("AlgorithmType", "advanced");
         context.startActivity(recommendResultIntent);
-        context.finish();
     }
 
     public void onClickFooterButton2(View view) {

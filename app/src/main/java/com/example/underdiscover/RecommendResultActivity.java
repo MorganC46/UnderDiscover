@@ -306,6 +306,10 @@ public class RecommendResultActivity extends AppCompatActivity {
         }
     }
 
+    public void onClickReturnToHome(View v) {
+        finish();
+    }
+
     private void addSongsToPlaylist(String playlistId) {
         String appendPlaylistQuery = playlistId + "/tracks";
         JSONArray jsUriArray = new JSONArray(trackUriList);

@@ -10,6 +10,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
@@ -19,6 +20,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.spotify.sdk.android.authentication.*;
@@ -43,6 +45,11 @@ public class SplashActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        TextView title = findViewById(R.id.splashTitle);
+        Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/title.ttf");
+        title.setTypeface(typeface);
+
         Button searchButton = findViewById(R.id.searchSpotify);
         this.context = this;
         searchButton.setVisibility(View.VISIBLE);
@@ -124,6 +131,5 @@ public class SplashActivity extends AppCompatActivity {
         searchIntent.putExtra("Access", ACCESS_TOKEN);
 
         SplashActivity.this.startActivity(searchIntent);
-        finish();
     }
 }

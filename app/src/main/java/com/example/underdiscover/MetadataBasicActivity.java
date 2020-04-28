@@ -77,7 +77,6 @@ public class MetadataBasicActivity extends AppCompatActivity {
         metaDataAdvancedIntent.putExtra("AttributeList", attributeList);
 
         context.startActivity(metaDataAdvancedIntent);
-        context.finish();
     }
 
     public void onClickFooterButton2(View view) {
