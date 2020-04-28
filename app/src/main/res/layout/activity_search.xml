@@ -4,108 +4,133 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/returnToMain"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:onClick="onClickReturnToMain"
-        android:text="RETURN TO HOME"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent" />
+    <LinearLayout
+        android:id="@+id/headerSearch"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent=".225"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:weightSum="3"
+        app:layout_constraintBottom_toTopOf="@+id/searchList"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/resultTitle"
-        android:layout_width="361dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginBottom="500dp"
-        android:gravity="center"
-        android:text="Search by..."
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.089" />
+        <TextView
+            android:id="@+id/resultTitle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Search by..."
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/searchTextBox"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/searchTextBox"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/searchTrack"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <EditText
+            android:id="@+id/searchTextBox"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="40dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toTopOf="@+id/buttonNavSearch"
+            app:layout_constraintTop_toBottomOf="@id/resultTitle" />
+
+        <LinearLayout
+            android:id="@+id/buttonNavSearch"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:weightSum="3"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/searchTextBox">
+
+            <Button
+                android:id="@+id/searchTrack"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="onClickSearchTrack"
+                android:text="track"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/searchAlbum"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="onClickSearchAlbum"
+                android:text="album"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/searchArtist"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="onClickSearchArtist"
+                android:text="artist"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/searchAlbum"
+                app:layout_constraintStart_toEndOf="@+id/searchTrack"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/searchList"
         android:layout_width="match_parent"
-        android:layout_height="395dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
+        android:layout_height="0dp"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
         android:divider="#000000"
         android:dividerHeight="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/returnToMain"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent=".65"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchTrack" />
+        app:layout_constraintTop_toBottomOf="@+id/headerSearch" />
 
-    <Button
-        android:id="@+id/searchTrack"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginBottom="548dp"
-        android:onClick="onClickSearchTrack"
-        android:text="track"
+    <LinearLayout
+        android:id="@+id/bottomNavSearch"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent=".075"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/searchList">
 
-    <Button
-        android:id="@+id/searchAlbum"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginBottom="548dp"
-        android:onClick="onClickSearchAlbum"
-        android:text="album"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.492" />
+        <Button
+            android:id="@+id/returnToMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:onClick="onClickReturnToMain"
+            android:text="RETURN TO HOME"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    <Button
-        android:id="@+id/searchArtist"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:layout_marginBottom="548dp"
-        android:onClick="onClickSearchArtist"
-        android:text="artist"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/searchAlbum"
-        app:layout_constraintStart_toEndOf="@+id/searchTrack"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.492" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

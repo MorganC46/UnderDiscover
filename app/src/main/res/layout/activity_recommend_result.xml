@@ -4,72 +4,85 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/returnToMain"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:onClick="onClickReturnToHome"
-        android:text="RETURN TO HOME"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.905"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/createNewPlaylist"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:onClick="onClickCreateNewPlaylist"
-        android:text="CREATE PLAYLIST"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.095"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <TextView
         android:id="@+id/resultTitle"
-        android:layout_width="361dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginBottom="500dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent=".075"
         android:gravity="center"
         android:text="We think you'll like the following..."
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.089" />
+        app:layout_constraintBottom_toTopOf="@+id/resultList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ListView
         android:id="@+id/resultList"
         android:layout_width="match_parent"
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
-        android:layout_height="500dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:divider="#000000"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent=".775"
         android:dividerHeight="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/returnToMain"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavRecommend"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/resultTitle" />
 
-    <Button
-        android:id="@+id/addToPlaylist"
-        android:layout_width="100dp"
+    <LinearLayout
+        android:id="@+id/bottomNavRecommend"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:onClick="onClickAddToPlaylist"
-        android:text="ADD TO PLAYLIST"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/returnToMain"
-        app:layout_constraintStart_toEndOf="@+id/createNewPlaylist" />
+        android:weightSum="3"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent=".075"
+        app:layout_constraintTop_toBottomOf="@+id/resultList"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/createNewPlaylist"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:onClick="onClickCreateNewPlaylist"
+            android:text="CREATE PLAYLIST"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/addToPlaylist"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:onClick="onClickAddToPlaylist"
+            android:text="ADD TO PLAYLIST"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/returnToMain"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:onClick="onClickReturnToHome"
+            android:text="RETURN TO HOME"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

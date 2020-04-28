@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/currentTrack"
-        android:layout_width="361dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
@@ -29,7 +29,7 @@
 
     <TextView
         android:id="@+id/infoBox"
-        android:layout_width="361dp"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginStart="40dp"
         android:layout_marginLeft="40dp"
@@ -95,13 +95,11 @@
 
     <ListView
         android:id="@+id/attributeList"
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="450dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="1dp"
         android:layout_marginTop="240dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="1dp"
         android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toTopOf="@+id/footerButton1"
         app:layout_constraintEnd_toEndOf="parent"
