@@ -14,6 +14,8 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -125,8 +127,12 @@ public class MetadataAdvancedActivity extends AppCompatActivity {
         HashMap passValues = new HashMap<>();
         HashMap<String, Double> attributeValues = (HashMap<String,Double>)getIntent().getSerializableExtra("AttributeValues");
 
+        Boolean noAttributeSelected = true;
+
         for (Map.Entry<String,Boolean> selectedPair : selectedAttributes.entrySet()) {
             if (selectedPair.getValue()) {
+
+                noAttributeSelected = false;
 
                 String attributeName = selectedPair.getKey();
 
@@ -140,13 +146,31 @@ public class MetadataAdvancedActivity extends AppCompatActivity {
             }
         }
 
-        Intent recommendResultIntent = new Intent(context, RecommendResultActivity.class);
-        recommendResultIntent.putExtra("Access", getIntent().getStringExtra("Access"));
-        recommendResultIntent.putExtra("Query", "https://api.spotify.com/v1/recommendations?limit=100&market=US&seed_tracks=" + getIntent().getStringExtra("TrackID"));
-        recommendResultIntent.putExtra("ComparisonValues", passValues);
-        recommendResultIntent.putExtra("Tightness", tightPercent);
-        recommendResultIntent.putExtra("AlgorithmType", "advanced");
-        context.startActivity(recommendResultIntent);
+        if (noAttributeSelected) {
+            Snackbar queryRequest = Snackbar.make(findViewById(R.id.attributeList), "No attributes selected - generate results based on popularity?", Snackbar.LENGTH_LONG + 10000)
+                    .setAction("YES", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent recommendResultIntent = new Intent(context, RecommendResultActivity.class);
+                            recommendResultIntent.putExtra("Access", getIntent().getStringExtra("Access"));
+                            recommendResultIntent.putExtra("Query", "https://api.spotify.com/v1/recommendations?limit=100&market=US&seed_tracks=" + getIntent().getStringExtra("TrackID"));
+                            recommendResultIntent.putExtra("ComparisonValues", passValues);
+                            recommendResultIntent.putExtra("Tightness", tightPercent);
+                            recommendResultIntent.putExtra("AlgorithmType", "advanced");
+                            context.startActivity(recommendResultIntent);
+                        }
+                    });
+            queryRequest.show();
+        }
+        else {
+            Intent recommendResultIntent = new Intent(context, RecommendResultActivity.class);
+            recommendResultIntent.putExtra("Access", getIntent().getStringExtra("Access"));
+            recommendResultIntent.putExtra("Query", "https://api.spotify.com/v1/recommendations?limit=100&market=US&seed_tracks=" + getIntent().getStringExtra("TrackID"));
+            recommendResultIntent.putExtra("ComparisonValues", passValues);
+            recommendResultIntent.putExtra("Tightness", tightPercent);
+            recommendResultIntent.putExtra("AlgorithmType", "advanced");
+            context.startActivity(recommendResultIntent);
+        }
     }
 
     public void onClickFooterButton2(View view) {

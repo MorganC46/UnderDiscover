@@ -107,7 +107,7 @@ public class RecommendResultActivity extends AppCompatActivity {
                             for (HashMap.Entry<String, Double> attributes : individualPercentages.entrySet()) {
                                 overallDifference = overallDifference + attributes.getValue();
                             }
-                            int popularityWeighted = Integer.parseInt(trackList.getJSONObject(count).getString("popularity"))/individualPercentages.size();
+                            Double popularityWeighted = Integer.parseInt(trackList.getJSONObject(count).getString("popularity"))/(1.5*individualPercentages.size());
                             if (overallDifference != 0.0) {
                                 overallDifference = overallDifference / (double) individualPercentages.size();
                             }

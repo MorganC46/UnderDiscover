@@ -2,6 +2,7 @@ package com.example.underdiscover;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,9 +51,14 @@ public class TrackListMatchAdapter extends ArrayAdapter {
         ProgressBar overallMatch = rowView.findViewById(R.id.overallMatchBar);
         TextView overallMatchText = rowView.findViewById(R.id.overallMatchText);
 
-        overallMatch.setProgress((int)Math.round(100-currentTrack.getOverallMatch()));
-
-        overallMatchText.setText((int)Math.round(100-currentTrack.getOverallMatch()) + "%");
+        if (currentTrack.getOverallMatch() > 100) {
+            overallMatch.setProgress(1);
+            overallMatchText.setText("1%");
+        }
+        else {
+            overallMatch.setProgress((int)Math.round(100-currentTrack.getOverallMatch()));
+            overallMatchText.setText((int)Math.round(100-currentTrack.getOverallMatch()) + "%");
+        }
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +104,7 @@ public class TrackListMatchAdapter extends ArrayAdapter {
             public void onClick(View v) {
                 AudioPreviewManager.killMediaPlayer();
                 for (HashMap.Entry<String, Double> attributes : currentTrack.getIndividualMatches().entrySet()) {
+                    Log.d("TEST", Double.toString(currentTrack.getOverallMatch()));
                     //TODO: Create explanation activity
                 }
             }
