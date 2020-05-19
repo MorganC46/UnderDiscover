@@ -94,7 +94,7 @@ public class MetadataAdvancedActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
                         for (int i = 0; i < metadataList.getChildCount(); i++) {
-                            if(pos == i ){
+                                if(pos == i ){
                                 if (metadataList.getChildAt(i).getBackground() instanceof ColorDrawable) {
                                     int code = ((ColorDrawable) metadataList.getChildAt(i).getBackground()).getColor();
                                     if (code == Color.GREEN) {

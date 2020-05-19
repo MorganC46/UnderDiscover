@@ -12,11 +12,11 @@
         android:paddingLeft="20dp"
         android:paddingBottom="10dp"
         android:text="Name"
-        android:textSize="24sp" />
+        android:textSize="22sp" />
 
     <Button
         android:id="@+id/showInfo"
-        android:layout_width="90dp"
+        android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
