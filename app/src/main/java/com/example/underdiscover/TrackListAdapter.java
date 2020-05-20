@@ -112,9 +112,9 @@ public class TrackListAdapter extends ArrayAdapter {
                         ((SearchActivity)context).dealWithAlbumTracksResult(result, currentTrack.getImage());
 
                     } catch (ExecutionException e) {
-                        //TODO: Handle Exception
+                        e.printStackTrace();
                     } catch (InterruptedException e) {
-                        //TODO: Handle Exception
+                        e.printStackTrace();
                     }
                 }
             });
@@ -143,9 +143,9 @@ public class TrackListAdapter extends ArrayAdapter {
                         ((SearchActivity)context).dealWithArtistAlbumsResult(result);
 
                     } catch (ExecutionException e) {
-                        //TODO: Handle Exception
+                        e.printStackTrace();
                     } catch (InterruptedException e) {
-                        //TODO: Handle Exception
+                        e.printStackTrace();
                     }
                 }
             });

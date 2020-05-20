@@ -27,7 +27,6 @@ public class SearchActivity extends AppCompatActivity {
 
     private Activity context;
     protected TrackListAdapter mainList;
-    //TODO: Create list for result data AKA attributeList
 
     private final String SEARCH_URL = "https://api.spotify.com/v1/search?";
 
@@ -62,7 +61,7 @@ public class SearchActivity extends AppCompatActivity {
                     InputMethodManager.HIDE_NOT_ALWAYS);
 
             String searchRequest = textBox.getText().toString().replaceAll(" ", "+");
-            String query = "q=" + searchRequest + "&type=" + type + "&limit=50"; //TODO: Manipulate searchRequest to create query
+            String query = "q=" + searchRequest + "&type=" + type + "&limit=50";
 
             final String apiUrl = SEARCH_URL + query;
 
@@ -80,9 +79,9 @@ public class SearchActivity extends AppCompatActivity {
                 }
 
             } catch (ExecutionException e) {
-                //TODO: Handle Exception
+                e.printStackTrace();
             } catch (InterruptedException e) {
-                //TODO: Handle Exception
+                e.printStackTrace();
             }
         }
     }
@@ -116,9 +115,9 @@ public class SearchActivity extends AppCompatActivity {
                             trackDetailsList.add(currentTrack);
 
                         } catch (ExecutionException e) {
-                            //TODO: Handle Exception
+                            e.printStackTrace();
                         } catch (InterruptedException e) {
-                            //TODO: Handle Exception
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -172,9 +171,9 @@ public class SearchActivity extends AppCompatActivity {
                         );
                         trackDetailsList.add(currentTrack);
                     } catch (ExecutionException e) {
-                        //TODO: Handle Exception
+                        e.printStackTrace();
                     } catch (InterruptedException e) {
-                        //TODO: Handle Exception
+                        e.printStackTrace();
                     }
                 }
             }
@@ -221,9 +220,9 @@ public class SearchActivity extends AppCompatActivity {
                         );
                         albumDetailsList.add(currentAlbum);
                     } catch (ExecutionException e) {
-                        //TODO: Handle Exception
+                        e.printStackTrace();
                     } catch (InterruptedException e) {
-                        //TODO: Handle Exception
+                        e.printStackTrace();
                     }
                 }
             }
@@ -272,9 +271,9 @@ public class SearchActivity extends AppCompatActivity {
                             artistDetailsList.add(currentArtist);
 
                         } catch (ExecutionException e) {
-                            //TODO: Handle Exception
+                            e.printStackTrace();
                         } catch (InterruptedException e) {
-                            //TODO: Handle Exception
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -336,9 +335,9 @@ public class SearchActivity extends AppCompatActivity {
                     );
                     albumDetailsList.add(currentAlbum);
                 } catch (ExecutionException e) {
-                    //TODO: Handle Exception
+                    e.printStackTrace();
                 } catch (InterruptedException e) {
-                    //TODO: Handle Exception
+                    e.printStackTrace();
                 }
             }
 

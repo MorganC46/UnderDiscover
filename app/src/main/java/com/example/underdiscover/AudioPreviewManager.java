@@ -13,6 +13,9 @@ import android.util.Log;
 // https://stackoverflow.com/questions/8486147/how-can-i-play-a-mp3-without-download-from-the-url
 
 public class AudioPreviewManager {
+    /*
+    Class to handle audio previews when requested by user
+     */
     private static MediaPlayer mediaPlayer;
 
     protected static void playPreview(final Context context, final String url) throws Exception {

@@ -18,6 +18,10 @@ public class GenericHttpRequests {
 
     public static class HttpRequestGet extends AsyncTask<Void, Void, String> {
 
+        /*
+        Generic function to submit a GET HTTP call
+         */
+
         String apiUrl;
         String accessToken;
 
@@ -25,20 +29,6 @@ public class GenericHttpRequests {
             this.apiUrl = apiUrl;
             this.accessToken = accessToken;
         }
-
-        // DEBUG FUNCTION
-
-//        protected static boolean isUrlValid(String url) {
-//            try {
-//                URL obj = new URL(url);
-//                obj.toURI();
-//                return true;
-//            } catch (MalformedURLException e) {
-//                return false;
-//            } catch (URISyntaxException e) {
-//                return false;
-//            }
-//        }
 
         //Connection method
         protected String doInBackground(Void... params) {
@@ -71,6 +61,10 @@ public class GenericHttpRequests {
     }
 
     public static class HttpRequestPost extends AsyncTask<Void, Void, String> {
+
+        /*
+        Generic function to submit a POST HTTP call
+         */
 
         String apiUrl;
         String accessToken;
@@ -138,6 +132,9 @@ public class GenericHttpRequests {
     }
 
     public static class ImageRequest extends AsyncTask<Void, Void, Drawable> {
+        /*
+        Fetch image from online source and draw it onto a Drawable object
+         */
 
         final String imageUrl;
 
@@ -163,7 +160,9 @@ public class GenericHttpRequests {
 
 
     protected static String streamIntoString(InputStream stream) {
-        //Method to process and correctly separate input streams
+        /*
+        String builder class - take in HTTP call return and process
+         */
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
             String data;

@@ -38,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
             noInternet.show();
         }
         else {
-            authenticateSpotify(); //TODO: Do this before the main activity is created - possibly in separate activity?
+            authenticateSpotify();
         }
 
         super.onCreate(savedInstanceState);
@@ -82,6 +82,9 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void authenticateSpotify() {
+        /*
+        Lets log in via Spotify - if not, we can't do anything
+         */
         AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.TOKEN, REDIRECT_ID);
         builder.setScopes(new String[]{"user-read-playback-state,streaming,playlist-read-collaborative,user-modify-playback-state,playlist-modify-public,user-library-modify,user-top-read,user-read-currently-playing,playlist-read-private,app-remote-control,playlist-modify-private,user-library-read"});
         AuthenticationRequest request = builder.build();
@@ -90,6 +93,9 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        /*
+        Sorted - lets do some recommending!
+         */
         super.onActivityResult(requestCode, resultCode, intent);
         ACCESS_TOKEN = AuthenticationClient.getResponse(resultCode, intent).getAccessToken();
 

@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -60,16 +58,22 @@ public class MetadataBasicActivity extends AppCompatActivity {
         tightnessLabel.setVisibility(View.GONE);
 
         try {
+            /*
+            Get the audio features of the selected track and process them
+             */
             String result = new GenericHttpRequests.HttpRequestGet(apiUrl, getIntent().getStringExtra("Access")).execute().get();
             dealWithResult(result);
         } catch (ExecutionException e) {
-            //TODO: Handle Exception
+            e.printStackTrace();
         } catch (InterruptedException e) {
-            //TODO: Handle Exception
+            e.printStackTrace();
         }
     }
 
     public void onClickFooterButton1(View view) {
+        /*
+        Switch to advanced mode
+         */
         Intent metaDataAdvancedIntent = new Intent(context, MetadataAdvancedActivity.class);
 
         metaDataAdvancedIntent.putExtra("TrackID", getIntent().getStringExtra("TrackID"));

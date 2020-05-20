@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -48,6 +47,10 @@ public class RecommendResultActivity extends AppCompatActivity {
     }
 
     protected void dealWithRecommendedResult(String result) {
+        /*
+        Process the returns from the initial seeded response from Spotify API
+        Weight, apply match value and finally sort before presenting to user
+         */
 
         try {
             final JSONObject jsonResp = new JSONObject(result);
@@ -225,7 +228,7 @@ public class RecommendResultActivity extends AppCompatActivity {
             e.printStackTrace();
             System.exit(3);
         } catch (NullPointerException e) {
-            //TODO: HANDLE EXCEPTION
+            e.printStackTrace();
         }
 
     }
@@ -244,6 +247,9 @@ public class RecommendResultActivity extends AppCompatActivity {
     }
 
     public void onClickAddToPlaylist(View v) {
+        /*
+        Add recommendations to existing Spotify playlist
+         */
 
         String playlistQuery = "https://api.spotify.com/v1/users/" + returnUserId() + "/playlists";
 
@@ -274,15 +280,18 @@ public class RecommendResultActivity extends AppCompatActivity {
             selectPlaylist.show();
 
         } catch (ExecutionException e) {
-        //TODO: Handle Exception
+            e.printStackTrace();
         } catch (InterruptedException e) {
-        //TODO: Handle Exception
+            e.printStackTrace();
         } catch (JSONException e) {
-
+            e.printStackTrace();
         }
     }
 
     public void onClickCreateNewPlaylist(View v) {
+        /*
+        Add recommendations to brand new shiny Spotify playlist
+         */
 
         String newPlaylistQuery = "https://api.spotify.com/v1/users/" + returnUserId() + "/playlists";
 
@@ -298,11 +307,11 @@ public class RecommendResultActivity extends AppCompatActivity {
             addSongsToPlaylist(playlistId);
 
         } catch (ExecutionException e) {
-            //TODO: Handle Exception
+            e.printStackTrace();
         } catch (InterruptedException e) {
-            //TODO: Handle Exception
+            e.printStackTrace();
         } catch (JSONException e) {
-            //TODO: Handle
+            e.printStackTrace();
         }
     }
 
@@ -311,6 +320,9 @@ public class RecommendResultActivity extends AppCompatActivity {
     }
 
     private void addSongsToPlaylist(String playlistId) {
+        /*
+        The actual adding to playlist bit
+         */
         String appendPlaylistQuery = playlistId + "/tracks";
         JSONArray jsUriArray = new JSONArray(trackUriList);
 
@@ -328,13 +340,16 @@ public class RecommendResultActivity extends AppCompatActivity {
             }
 
         } catch (ExecutionException e) {
-            //TODO: Handle Exception
+            e.printStackTrace();
         } catch (InterruptedException e) {
-            //TODO: Handle Exception
+            e.printStackTrace();
         }
     }
 
     private String returnUserId() {
+        /*
+        Get the user's spotify ID so we can find some playlists
+         */
 
         String queryResult = "";
         String userId = "";
@@ -348,19 +363,22 @@ public class RecommendResultActivity extends AppCompatActivity {
             userId = jsonResp.getString("id");
 
         } catch (ExecutionException e) {
-            //TODO: Handle Exception
+            e.printStackTrace();
 
         } catch (InterruptedException e) {
-            //TODO: Handle Exception
+            e.printStackTrace();
 
         } catch (JSONException e) {
-            //TODO: Handle Exception
+            e.printStackTrace();
         }
 
         return userId;
     }
 
     private void generateRecommendations(Double selectedTightness) {
+        /*
+        The initial seeding request to the API
+         */
         String query = getIntent().getStringExtra("Query");
 
         HashMap<String,Double> passValues = (HashMap<String,Double>)getIntent().getSerializableExtra("ComparisonValues");
@@ -398,9 +416,9 @@ public class RecommendResultActivity extends AppCompatActivity {
             dealWithRecommendedResult(result);
 
         } catch (ExecutionException e) {
-            //TODO: Handle Exception
+            e.printStackTrace();
         } catch (InterruptedException e) {
-            //TODO: Handle Exception
+            e.printStackTrace();
         }
     }
 
